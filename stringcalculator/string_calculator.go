@@ -29,11 +29,16 @@ func (s *StringCalculator) parseTemplate(template string) (delimiter string, num
 	if err != nil {
 		return
 	}
-	b := []byte(template)
-	loc := reg.FindIndex(b)
-	if len(loc) == 0 {
+	templateBytes := []byte(template)
+	delimiterHeaderIndexes := reg.FindIndex(templateBytes)
+	if len(delimiterHeaderIndexes) == 0 {
 		return
 	}
-	l, r := loc[0]+len(`//`), loc[1]-len(`\n`)
-	return string(b[l:r]), string(b[loc[1]:])
+	return s.parseTemplateBytes(delimiterHeaderIndexes, templateBytes)
+}
+
+func (s *StringCalculator) parseTemplateBytes(delimiterHeaderIndexes []int, templateBytes []byte) (string, string) {
+	delimiterHeaderStartIndex, delimiterHeaderEndIndex := delimiterHeaderIndexes[0], delimiterHeaderIndexes[1]
+	delimiterStartIndex, delimiterEndIndex := delimiterHeaderStartIndex+len(`//`), delimiterHeaderEndIndex-len(`\n`)
+	return string(templateBytes[delimiterStartIndex:delimiterEndIndex]), string(templateBytes[delimiterHeaderEndIndex:])
 }
