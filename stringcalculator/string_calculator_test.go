@@ -16,11 +16,11 @@ func Test_StringCalculator_Add(t *testing.T) {
 			numbers:  "",
 			expected: 0,
 		},
-		"SingleNumber_ReturnsThatNumbers": {
+		"SingleNumber_ReturnsThatNumber": {
 			numbers:  "1",
 			expected: 1,
 		},
-		"AnotherSingleNumber_ReturnsThatNumbers": {
+		"AnotherSingleNumber_ReturnsThatNumber": {
 			numbers:  "2",
 			expected: 2,
 		},
