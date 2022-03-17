@@ -36,6 +36,10 @@ func Test_StringCalculator_Add(t *testing.T) {
 			numbers:  "1,3,5,7,9",
 			expected: 25,
 		},
+		"HandleNewLineDelimiter": {
+			numbers:  `1\n2,3`,
+			expected: 6,
+		},
 	}
 
 	for name, tt := range testcases {
@@ -48,10 +52,4 @@ func Test_StringCalculator_Add(t *testing.T) {
 		})
 	}
 
-}
-
-func Test_StringCalculator_Add_HandleNewLineDelimiter(t *testing.T) {
-	sc := NewStringCalculator()
-	assert.Equal(t, 6, sc.Add(`1\n2,3`))
-	assert.Equal(t, 4, sc.Add(`1\n,3`))
 }
