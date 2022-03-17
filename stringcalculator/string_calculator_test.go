@@ -6,12 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_Add_SingleNumber_ReturnsThatNumbers(t *testing.T) {
-	sc := NewStringCalculator()
-	assert.NotNil(t, sc)
-	assert.Equal(t, 1, sc.Add("1"))
-}
-
 func Test_StringCalculator(t *testing.T) {
 
 	testcases := map[string]struct {
@@ -21,6 +15,10 @@ func Test_StringCalculator(t *testing.T) {
 		"Add_EmptyString_ReturnsZero": {
 			numbers:  "",
 			expected: 0,
+		},
+		"Add_SingleNumber_ReturnsThatNumbers": {
+			numbers:  "1",
+			expected: 1,
 		},
 	}
 
