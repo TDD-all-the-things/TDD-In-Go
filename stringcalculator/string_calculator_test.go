@@ -58,6 +58,10 @@ func Test_StringCalculator_Add(t *testing.T) {
 			numbers: "-2",
 			err:     errors.New("negatives not allowed - -2"),
 		},
+		"Multiple Negative Numbers": {
+			numbers: "7,-2,6,-5,",
+			err:     errors.New("negatives not allowed - -2,-5"),
+		},
 	}
 
 	for name, tt := range testcases {
@@ -68,7 +72,7 @@ func Test_StringCalculator_Add(t *testing.T) {
 			assert.NotNil(t, sc)
 			actual, err := sc.Add(tt.numbers)
 			if tt.err != nil {
-				assert.ErrorContains(t, tt.err, err.Error())
+				assert.Equal(t, tt.err.Error(), err.Error())
 			}
 			assert.Equal(t, tt.expected, actual)
 		})
