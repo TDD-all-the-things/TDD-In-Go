@@ -1,6 +1,7 @@
 package stringcalculator
 
 import (
+	"errors"
 	"regexp"
 	"strconv"
 	"strings"
@@ -13,14 +14,17 @@ func NewStringCalculator() *StringCalculator {
 	return &StringCalculator{}
 }
 
-func (s *StringCalculator) Add(template string) int {
+func (s *StringCalculator) Add(template string) (int, error) {
 	sum := 0
 	delimiter, numbers := s.parseTemplate(template)
 	for _, number := range strings.Split(strings.ReplaceAll(numbers, `\n`, delimiter), delimiter) {
 		num, _ := strconv.Atoi(number)
+		if num < 0 {
+			return 0, errors.New("negatives not allowed - -1")
+		}
 		sum += num
 	}
-	return sum
+	return sum, nil
 }
 
 func (s *StringCalculator) parseTemplate(template string) (delimiter string, numbers string) {
