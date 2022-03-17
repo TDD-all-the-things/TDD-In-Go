@@ -16,21 +16,25 @@ func Test_StringCalculator_Add(t *testing.T) {
 			numbers:  "",
 			expected: 0,
 		},
-		"SingleNumber_ReturnsThatNumber": {
+		"SingleNumber": {
 			numbers:  "1",
 			expected: 1,
 		},
-		"AnotherSingleNumber_ReturnsThatNumber": {
+		"AnotherSingleNumbe": {
 			numbers:  "2",
 			expected: 2,
 		},
-		"TwoNumbers_ReturnsSumOfBoth": {
+		"TwoNumbers": {
 			numbers:  "1,2",
 			expected: 3,
 		},
-		"AnotherTwoNumbers_ReturnsSumOfBoth": {
+		"AnotherTwoNumbers": {
 			numbers:  "3,4",
 			expected: 7,
+		},
+		"UnknownAmountOfNumbers": {
+			numbers:  "1,3,5,7,9",
+			expected: 25,
 		},
 	}
 
@@ -44,9 +48,4 @@ func Test_StringCalculator_Add(t *testing.T) {
 		})
 	}
 
-}
-
-func Test_Add_UnknownAmountOfNumbers_ReturnsSumOfThem(t *testing.T) {
-	sc := NewStringCalculator()
-	assert.Equal(t, 25, sc.Add("1,3,5,7,9"))
 }
