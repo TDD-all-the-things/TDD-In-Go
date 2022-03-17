@@ -44,6 +44,10 @@ func Test_StringCalculator_Add(t *testing.T) {
 			numbers:  `//;\n4;5`,
 			expected: 9,
 		},
+		"Another Customize Delimiter [.]": {
+			numbers:  `//.\n4.5.1`,
+			expected: 10,
+		},
 	}
 
 	for name, tt := range testcases {
