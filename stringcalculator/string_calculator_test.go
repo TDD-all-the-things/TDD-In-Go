@@ -20,6 +20,10 @@ func Test_StringCalculator_Add(t *testing.T) {
 			numbers:  "1",
 			expected: 1,
 		},
+		"AnotherSingleNumber_ReturnsThatNumbers": {
+			numbers:  "2",
+			expected: 2,
+		},
 	}
 
 	for name, tt := range testcases {
