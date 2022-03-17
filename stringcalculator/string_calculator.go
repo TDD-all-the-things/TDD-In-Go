@@ -1,6 +1,7 @@
 package stringcalculator
 
 import (
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -24,8 +25,15 @@ func (s *StringCalculator) Add(template string) int {
 
 func (s *StringCalculator) parseTemplate(template string) (delimiter string, numbers string) {
 	delimiter, numbers = ",", template
-	if strings.HasPrefix(template, `//`) {
-		delimiter, numbers = ";", template[5:]
+	reg, err := regexp.Compile(`^//[\D]+\\n`)
+	if err != nil {
+		return
 	}
-	return
+	b := []byte(template)
+	loc := reg.FindIndex(b)
+	if len(loc) == 0 {
+		return
+	}
+	l, r := loc[0]+len(`//`), loc[1]-len(`\n`)
+	return string(b[l:r]), string(b[loc[1]:])
 }
