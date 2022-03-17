@@ -16,27 +16,27 @@ func Test_StringCalculator_Add(t *testing.T) {
 			numbers:  "",
 			expected: 0,
 		},
-		"SingleNumber": {
+		"Single Number": {
 			numbers:  "1",
 			expected: 1,
 		},
-		"AnotherSingleNumbe": {
+		"Another Single Number": {
 			numbers:  "2",
 			expected: 2,
 		},
-		"TwoNumbers": {
+		"Two Numbers": {
 			numbers:  "1,2",
 			expected: 3,
 		},
-		"AnotherTwoNumbers": {
+		"Another Two Numbers": {
 			numbers:  "3,4",
 			expected: 7,
 		},
-		"UnknownAmountOfNumbers": {
+		"Unknown Amount Of Numbers": {
 			numbers:  "1,3,5,7,9",
 			expected: 25,
 		},
-		"HandleNewLineDelimiter": {
+		"Handle NewLine Delimiter": {
 			numbers:  `1\n2,3`,
 			expected: 6,
 		},
