@@ -4,9 +4,9 @@ type StringCalculator struct {
 }
 
 func NewStringCalculator() *StringCalculator {
-	return nil
+	return &StringCalculator{}
 }
 
 func (s *StringCalculator) Add(numbers string) int {
-	return -1
+	return 0
 }
