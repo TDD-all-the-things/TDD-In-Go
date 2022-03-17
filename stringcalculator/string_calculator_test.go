@@ -28,6 +28,7 @@ func Test_StringCalculator_Add(t *testing.T) {
 
 	for name, tt := range testcases {
 		t.Run(name, func(t *testing.T) {
+			tt := tt
 			t.Parallel()
 			sc := NewStringCalculator()
 			assert.NotNil(t, sc)
