@@ -2,6 +2,7 @@ package stringcalculator
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -20,7 +21,7 @@ func (s *StringCalculator) Add(template string) (int, error) {
 	for _, number := range strings.Split(strings.ReplaceAll(numbers, `\n`, delimiter), delimiter) {
 		num, _ := strconv.Atoi(number)
 		if num < 0 {
-			return 0, errors.New("negatives not allowed - -1")
+			return 0, errors.New(fmt.Sprintf("negatives not allowed - %s", number))
 		}
 		sum += num
 	}
