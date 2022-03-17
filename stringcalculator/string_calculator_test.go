@@ -45,3 +45,8 @@ func Test_StringCalculator_Add(t *testing.T) {
 	}
 
 }
+
+func Test_Add_UnknownAmountOfNumbers_ReturnsSumOfThem(t *testing.T) {
+	sc := NewStringCalculator()
+	assert.Equal(t, 25, sc.Add("1,3,5,7,9"))
+}
