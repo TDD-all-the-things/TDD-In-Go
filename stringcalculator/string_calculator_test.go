@@ -54,6 +54,10 @@ func Test_StringCalculator_Add(t *testing.T) {
 			numbers: "-1",
 			err:     errors.New("negatives not allowed - -1"),
 		},
+		"Another Single Negative Number": {
+			numbers: "-2",
+			err:     errors.New("negatives not allowed - -2"),
+		},
 	}
 
 	for name, tt := range testcases {
