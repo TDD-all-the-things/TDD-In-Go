@@ -11,3 +11,9 @@ func Test_Add_EmptyString_ReturnsZero(t *testing.T) {
 	assert.NotNil(t, sc)
 	assert.Equal(t, 0, sc.Add(""))
 }
+
+func Test_Add_SingleNumber_ReturnsThatNumbers(t *testing.T) {
+	sc := NewStringCalculator()
+	assert.NotNil(t, sc)
+	assert.Equal(t, 1, sc.Add("1"))
+}
