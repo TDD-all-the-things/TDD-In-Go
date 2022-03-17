@@ -28,6 +28,10 @@ func Test_StringCalculator_Add(t *testing.T) {
 			numbers:  "1,2",
 			expected: 3,
 		},
+		"AnotherTwoNumbers_ReturnsSumOfBoth": {
+			numbers:  "3,4",
+			expected: 7,
+		},
 	}
 
 	for name, tt := range testcases {
