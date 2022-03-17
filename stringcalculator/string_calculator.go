@@ -1,5 +1,7 @@
 package stringcalculator
 
+import "strconv"
+
 type StringCalculator struct {
 }
 
@@ -8,8 +10,6 @@ func NewStringCalculator() *StringCalculator {
 }
 
 func (s *StringCalculator) Add(numbers string) int {
-	if len(numbers) == 0 {
-		return 0
-	}
-	return 1
+	num, _ := strconv.Atoi(numbers)
+	return num
 }
