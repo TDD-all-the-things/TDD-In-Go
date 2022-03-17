@@ -52,3 +52,7 @@ func (s *StringCalculator) parseTemplateBytes(delimiterHeaderIndexes []int, temp
 	delimiterStartIndex, delimiterEndIndex := delimiterHeaderStartIndex+len(`//`), delimiterHeaderEndIndex-len(`\n`)
 	return string(templateBytes[delimiterStartIndex:delimiterEndIndex]), string(templateBytes[delimiterHeaderEndIndex:])
 }
+
+func (s *StringCalculator) AddCalledCount() int {
+	return -1
+}
