@@ -1,6 +1,7 @@
 package stringcalculator
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -11,6 +12,7 @@ func Test_StringCalculator_Add(t *testing.T) {
 	testcases := map[string]struct {
 		numbers  string
 		expected int
+		err      error
 	}{
 		"EmptyString_ReturnsZero": {
 			numbers:  "",
@@ -48,6 +50,10 @@ func Test_StringCalculator_Add(t *testing.T) {
 			numbers:  `//.\n4.5.1`,
 			expected: 10,
 		},
+		"Single Negative Number": {
+			numbers: "-1",
+			err:     errors.New("negatives not allowed - -1"),
+		},
 	}
 
 	for name, tt := range testcases {
@@ -56,7 +62,11 @@ func Test_StringCalculator_Add(t *testing.T) {
 			t.Parallel()
 			sc := NewStringCalculator()
 			assert.NotNil(t, sc)
-			assert.Equal(t, tt.expected, sc.Add(tt.numbers))
+			actual, err := sc.Add(tt.numbers)
+			if tt.err != nil {
+				assert.ErrorContains(t, tt.err, err.Error())
+			}
+			assert.Equal(t, tt.expected, actual)
 		})
 	}
 
