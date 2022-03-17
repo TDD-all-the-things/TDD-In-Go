@@ -12,9 +12,13 @@ func NewStringCalculator() *StringCalculator {
 	return &StringCalculator{}
 }
 
-func (s *StringCalculator) Add(numbers string) int {
+func (s *StringCalculator) Add(template string) int {
 	sum := 0
-	for _, number := range strings.Split(strings.ReplaceAll(numbers, `\n`, ","), ",") {
+	delimiter, numbers := ",", template
+	if strings.HasPrefix(template, `//`) {
+		delimiter, numbers = ";", template[5:]
+	}
+	for _, number := range strings.Split(strings.ReplaceAll(numbers, `\n`, delimiter), delimiter) {
 		num, _ := strconv.Atoi(number)
 		sum += num
 	}
