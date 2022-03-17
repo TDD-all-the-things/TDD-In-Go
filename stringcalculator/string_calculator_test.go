@@ -6,17 +6,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_StringCalculator(t *testing.T) {
+func Test_StringCalculator_Add(t *testing.T) {
 
 	testcases := map[string]struct {
 		numbers  string
 		expected int
 	}{
-		"Add_EmptyString_ReturnsZero": {
+		"EmptyString_ReturnsZero": {
 			numbers:  "",
 			expected: 0,
 		},
-		"Add_SingleNumber_ReturnsThatNumbers": {
+		"SingleNumber_ReturnsThatNumbers": {
 			numbers:  "1",
 			expected: 1,
 		},
