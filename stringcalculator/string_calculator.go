@@ -14,7 +14,8 @@ func NewStringCalculator() *StringCalculator {
 
 func (s *StringCalculator) Add(numbers string) int {
 	sum := 0
-	for _, number := range strings.Split(numbers, ",") {
+	replacedNumbers := strings.ReplaceAll(numbers, `\n`, ",")
+	for _, number := range strings.Split(replacedNumbers, ",") {
 		num, _ := strconv.Atoi(number)
 		sum += num
 	}
