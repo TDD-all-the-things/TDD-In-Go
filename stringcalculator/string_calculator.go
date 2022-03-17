@@ -8,5 +8,8 @@ func NewStringCalculator() *StringCalculator {
 }
 
 func (s *StringCalculator) Add(numbers string) int {
-	return 0
+	if len(numbers) == 0 {
+		return 0
+	}
+	return 1
 }
