@@ -9,10 +9,10 @@
 ### 测试列表
 
 1. Single Option
-    - case 1
-      - `-l` bool
-      - `-p 8080` int
-      - `-d /usr/logs` string
+    - ~~case 1~~
+      - ~~`-l` bool~~
+      - ~~`-p 8080` int~~
+      - ~~`-d /usr/logs` string~~
     - case 2
       - `-g this is a list` []stirng
       - `-d 1 3 2 4` []int
@@ -23,8 +23,8 @@
    - bool `-l t` `-l t f`
    - int `-p` `-p 8080 8081`
    - string `-d /usr/logs /usr/vars`
-4. Default Values
-   - bool `false`
-   - int `0`
-   - string `""`
+4. ~~Default Values~~
+   - ~~bool `false`~~
+   - ~~int `0`~~
+   - ~~string `""`~~
 5. Handle Error
