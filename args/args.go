@@ -9,7 +9,13 @@ func Parse(option *Option, flags ...string) {
 }
 
 type Option struct {
-	logging bool
+	logging   bool
+	port      int
+	directory string
+}
+
+func NewOption(logging bool, port int, directory string) Option {
+	return Option{logging: logging, port: port, directory: directory}
 }
 
 func (o *Option) Logging() bool {
@@ -17,8 +23,9 @@ func (o *Option) Logging() bool {
 }
 
 func (o *Option) Port() int {
-	return 0
+	return o.port
 }
+
 func (o *Option) Directory() string {
-	return ""
+	return o.directory
 }
