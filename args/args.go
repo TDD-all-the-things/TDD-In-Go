@@ -8,6 +8,8 @@ func Parse(option *Option, flags ...string) {
 			option.logging = true
 		} else if flag == "-p" {
 			option.port, _ = strconv.Atoi(flags[i+1])
+		} else if flag == "-d" {
+			option.directory = flags[i+1]
 		}
 	}
 }
