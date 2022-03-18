@@ -29,6 +29,10 @@ func TestParseOption(t *testing.T) {
 			flags:    []string{"-d", "/usr/logs"},
 			expected: args.NewOption(false, 0, "/usr/logs"),
 		},
+		"multiple flags '-l -p 9090 -d /usr/vars'": {
+			flags:    []string{"-l", "-p", "9090", "-d", "/usr/vars"},
+			expected: args.NewOption(true, 9090, "/usr/vars"),
+		},
 	}
 
 	for name, tt := range testcases {
