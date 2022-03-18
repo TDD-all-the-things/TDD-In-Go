@@ -63,6 +63,10 @@ func Test_StringCalculator_Add(t *testing.T) {
 			numbers: "7,-2,6,-5,",
 			err:     errors.New("negatives not allowed - -2,-5"),
 		},
+		"Numbers bigger than 1000 should be ignored": {
+			numbers:  "1000,1001,1002",
+			expected: 1000,
+		},
 	}
 
 	for name, tt := range testcases {
