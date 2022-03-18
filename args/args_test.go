@@ -25,6 +25,10 @@ func TestParseOption(t *testing.T) {
 			flags:    []string{},
 			expected: args.Option{},
 		},
+		"-l only": {
+			flags:    []string{"-l"},
+			expected: args.NewOption(true, 0, ""),
+		},
 	}
 
 	for name, tt := range testcases {
@@ -33,7 +37,7 @@ func TestParseOption(t *testing.T) {
 			tt := tt
 			// 利用多核,并行运行
 			t.Parallel()
-			
+
 			var actual args.Option
 			args.Parse(&actual, tt.flags...)
 			assert.Equal(t, tt.expected.Logging(), actual.Logging())
