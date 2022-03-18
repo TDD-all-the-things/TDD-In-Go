@@ -6,10 +6,11 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync/atomic"
 )
 
 type StringCalculator struct {
-	addCalledCounter int
+	addCalledCounter int32
 }
 
 func NewStringCalculator() *StringCalculator {
@@ -17,7 +18,7 @@ func NewStringCalculator() *StringCalculator {
 }
 
 func (s *StringCalculator) Add(template string) (int, error) {
-	s.addCalledCounter++
+	atomic.AddInt32(&s.addCalledCounter, 1)
 	sum := 0
 	delimiter, numbers := s.parseTemplate(template)
 	negatives := []string{}
@@ -56,5 +57,5 @@ func (s *StringCalculator) parseTemplateBytes(delimiterHeaderIndexes []int, temp
 }
 
 func (s *StringCalculator) AddCalledCount() int {
-	return s.addCalledCounter
+	return int(atomic.LoadInt32(&s.addCalledCounter))
 }
