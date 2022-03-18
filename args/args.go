@@ -1,9 +1,13 @@
 package args
 
+import "strconv"
+
 func Parse(option *Option, flags ...string) {
-	for _, flag := range flags {
+	for i, flag := range flags {
 		if flag == "-l" {
 			option.logging = true
+		} else if flag == "-p" {
+			option.port, _ = strconv.Atoi(flags[i+1])
 		}
 	}
 }
