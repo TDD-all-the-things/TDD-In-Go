@@ -1,7 +1,6 @@
 package stringcalculator
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"regexp"
@@ -21,9 +20,9 @@ func NewStringCalculator() *StringCalculator {
 func (s *StringCalculator) Add(template string) (int, error) {
 	atomic.AddInt32(&s.addCalledCounter, 1)
 	sum := 0
-	delimiter, numbers := s.parseTemplate(template)
+	delimiters, numbers := s.parseTemplate(template)
 	negatives := []string{}
-	for _, number := range strings.FieldsFunc(numbers, func(r rune) bool { return strings.ContainsRune(delimiter, r) }) {
+	for _, number := range strings.FieldsFunc(numbers, func(r rune) bool { return strings.ContainsRune(delimiters, r) }) {
 		num, _ := strconv.Atoi(number)
 		if num < 0 {
 			negatives = append(negatives, number)
@@ -40,8 +39,8 @@ func (s *StringCalculator) Add(template string) (int, error) {
 	return sum, nil
 }
 
-func (s *StringCalculator) parseTemplate(template string) (delimiter string, numbers string) {
-	delimiter, numbers = ",\\n", template
+func (s *StringCalculator) parseTemplate(template string) (delimiters string, numbers string) {
+	delimiters, numbers = ",\\n", template
 	reg, err := regexp.Compile(`^//[\D]+\\n`)
 	if err != nil {
 		return
@@ -51,17 +50,7 @@ func (s *StringCalculator) parseTemplate(template string) (delimiter string, num
 	if len(delimiterHeaderIndexes) == 0 {
 		return
 	}
-	return s.parseTemplateBytes(delimiterHeaderIndexes, templateBytes)
-}
-
-func (s *StringCalculator) parseTemplateBytes(delimiterHeaderIndexes []int, templateBytes []byte) (string, string) {
-	delimiterHeaderStartIndex, delimiterHeaderEndIndex := delimiterHeaderIndexes[0], delimiterHeaderIndexes[1]
-	delimiterStartIndex, delimiterEndIndex := delimiterHeaderStartIndex+len(`//`), delimiterHeaderEndIndex-len(`\n`)
-	if bytes.HasPrefix(templateBytes[delimiterStartIndex:delimiterEndIndex], []byte("[")) {
-		delimiterStartIndex += len("[")
-		delimiterEndIndex -= len("]")
-	}
-	return string(templateBytes[delimiterStartIndex:delimiterEndIndex]), string(templateBytes[delimiterHeaderEndIndex:])
+	return string(templateBytes[delimiterHeaderIndexes[0]:delimiterHeaderIndexes[1]]), string(templateBytes[delimiterHeaderIndexes[1]:])
 }
 
 func (s *StringCalculator) AddCalledCount() int {
