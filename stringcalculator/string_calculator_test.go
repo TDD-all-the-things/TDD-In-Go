@@ -51,6 +51,10 @@ func Test_StringCalculator_Add(t *testing.T) {
 			numbers:  `//.\n4.5.1`,
 			expected: 10,
 		},
+		"Customize Delimiter Can Be Of Any Length [***]": {
+			numbers:  `//[***]\n1***2***3`,
+			expected: 6,
+		},
 		"Single Negative Number": {
 			numbers: "-1",
 			err:     errors.New("negatives not allowed - -1"),
