@@ -14,3 +14,11 @@ func TestParseOption_NoFlagsPassed_GetsDefaultValues(t *testing.T) {
 	assert.Equal(t, 0, option.Port())
 	assert.Equal(t, "", option.Directory())
 }
+
+func TestParseOption_OnlyLoggingFlagPassed_GetsTrueForLoggingAndDefaultValuesForOthers(t *testing.T) {
+	var option args.Option
+	args.Parse(&option, "-l")
+	assert.Equal(t, true, option.Logging())
+	assert.Equal(t, 0, option.Port())
+	assert.Equal(t, "", option.Directory())
+}
