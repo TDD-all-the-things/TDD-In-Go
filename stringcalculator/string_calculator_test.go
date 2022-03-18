@@ -2,6 +2,7 @@ package stringcalculator
 
 import (
 	"errors"
+	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -81,8 +82,23 @@ func Test_StringCalculator_Add(t *testing.T) {
 }
 
 func Test_AddCalledCount(t *testing.T) {
+	t.Parallel()
 	sc := NewStringCalculator()
 	assert.Equal(t, 0, sc.AddCalledCount())
-	sc.Add("")
-	assert.Equal(t, 1, sc.AddCalledCount())
+
+	t.Run("Concurrent Problem", func(t *testing.T) {
+		t.Parallel()
+		n := 1000
+		var wg sync.WaitGroup
+		for i := 0; i < n; i++ {
+			wg.Add(1)
+			go func() {
+				sc.Add("")
+				wg.Done()
+			}()
+		}
+		wg.Wait()
+		assert.Equal(t, n, sc.AddCalledCount())
+	})
+
 }
