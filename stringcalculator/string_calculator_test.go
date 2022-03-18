@@ -71,6 +71,10 @@ func Test_StringCalculator_Add(t *testing.T) {
 			numbers:  "1000,1001,1002",
 			expected: 1000,
 		},
+		"Customize Multiple Delimiters [*][%]": {
+			numbers:  `//[*][%]\n3*2%3`,
+			expected: 8,
+		},
 	}
 
 	for name, tt := range testcases {
