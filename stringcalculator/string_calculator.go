@@ -1,6 +1,7 @@
 package stringcalculator
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"regexp"
@@ -56,6 +57,10 @@ func (s *StringCalculator) parseTemplate(template string) (delimiter string, num
 func (s *StringCalculator) parseTemplateBytes(delimiterHeaderIndexes []int, templateBytes []byte) (string, string) {
 	delimiterHeaderStartIndex, delimiterHeaderEndIndex := delimiterHeaderIndexes[0], delimiterHeaderIndexes[1]
 	delimiterStartIndex, delimiterEndIndex := delimiterHeaderStartIndex+len(`//`), delimiterHeaderEndIndex-len(`\n`)
+	if bytes.HasPrefix(templateBytes[delimiterStartIndex:delimiterEndIndex], []byte("[")) {
+		delimiterStartIndex += len("[")
+		delimiterEndIndex -= len("]")
+	}
 	return string(templateBytes[delimiterStartIndex:delimiterEndIndex]), string(templateBytes[delimiterHeaderEndIndex:])
 }
 
