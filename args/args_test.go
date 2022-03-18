@@ -25,6 +25,10 @@ func TestParseOption(t *testing.T) {
 			flags:    []string{"-p", "8080"},
 			expected: args.NewOption(false, 8080, ""),
 		},
+		"-d only": {
+			flags:    []string{"-d", "/usr/logs"},
+			expected: args.NewOption(false, 0, "/usr/logs"),
+		},
 	}
 
 	for name, tt := range testcases {
