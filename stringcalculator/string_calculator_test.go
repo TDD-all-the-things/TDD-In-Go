@@ -75,6 +75,10 @@ func Test_StringCalculator_Add(t *testing.T) {
 			numbers:  `//[*][%]\n3*2%3`,
 			expected: 8,
 		},
+		"Customize Multiple Delimiters With Length Longer Than One Char [**][%%%]": {
+			numbers:  `//[**][%%%]\n4**4%%%4`,
+			expected: 12,
+		},
 	}
 
 	for name, tt := range testcases {
