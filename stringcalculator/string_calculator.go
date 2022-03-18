@@ -28,6 +28,9 @@ func (s *StringCalculator) Add(template string) (int, error) {
 			negatives = append(negatives, number)
 			continue
 		}
+		if num > 1000 {
+			num = 0
+		}
 		sum += num
 	}
 	if len(negatives) != 0 {
