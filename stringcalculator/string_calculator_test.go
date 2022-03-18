@@ -83,4 +83,6 @@ func Test_StringCalculator_Add(t *testing.T) {
 func Test_AddCalledCount(t *testing.T) {
 	sc := NewStringCalculator()
 	assert.Equal(t, 0, sc.AddCalledCount())
+	sc.Add("")
+	assert.Equal(t, 1, sc.AddCalledCount())
 }
