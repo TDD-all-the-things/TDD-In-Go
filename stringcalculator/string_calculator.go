@@ -9,6 +9,7 @@ import (
 )
 
 type StringCalculator struct {
+	addCalledCounter int
 }
 
 func NewStringCalculator() *StringCalculator {
@@ -16,6 +17,7 @@ func NewStringCalculator() *StringCalculator {
 }
 
 func (s *StringCalculator) Add(template string) (int, error) {
+	s.addCalledCounter++
 	sum := 0
 	delimiter, numbers := s.parseTemplate(template)
 	negatives := []string{}
@@ -54,5 +56,5 @@ func (s *StringCalculator) parseTemplateBytes(delimiterHeaderIndexes []int, temp
 }
 
 func (s *StringCalculator) AddCalledCount() int {
-	return 0
+	return s.addCalledCounter
 }
