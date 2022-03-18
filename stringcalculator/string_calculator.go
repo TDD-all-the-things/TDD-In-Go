@@ -54,5 +54,5 @@ func (s *StringCalculator) parseTemplateBytes(delimiterHeaderIndexes []int, temp
 }
 
 func (s *StringCalculator) AddCalledCount() int {
-	return -1
+	return 0
 }
