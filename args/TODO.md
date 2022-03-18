@@ -17,7 +17,7 @@
       - `-g this is a list` []stirng
       - `-d 1 3 2 4` []int
 2. Multiple Options
-   - `-l -p 8080 -d /usr/logs`
+   - ~~`-l -p 8080 -d /usr/logs`~~
    - `-g this is a list -d 1 3 2 4`
 3. Sad path
    - bool `-l t` `-l t f`
