@@ -23,7 +23,7 @@ func (s *StringCalculator) Add(template string) (int, error) {
 	sum := 0
 	delimiter, numbers := s.parseTemplate(template)
 	negatives := []string{}
-	for _, number := range strings.Split(strings.ReplaceAll(numbers, `\n`, delimiter), delimiter) {
+	for _, number := range strings.FieldsFunc(numbers, func(r rune) bool { return strings.ContainsRune(delimiter, r) }) {
 		num, _ := strconv.Atoi(number)
 		if num < 0 {
 			negatives = append(negatives, number)
@@ -35,13 +35,13 @@ func (s *StringCalculator) Add(template string) (int, error) {
 		sum += num
 	}
 	if len(negatives) != 0 {
-		return 0, errors.New(fmt.Sprintf("negatives not allowed - %s", strings.Join(negatives, delimiter)))
+		return 0, errors.New(fmt.Sprintf("negatives not allowed - %s", strings.Join(negatives, ",")))
 	}
 	return sum, nil
 }
 
 func (s *StringCalculator) parseTemplate(template string) (delimiter string, numbers string) {
-	delimiter, numbers = ",", template
+	delimiter, numbers = ",\\n", template
 	reg, err := regexp.Compile(`^//[\D]+\\n`)
 	if err != nil {
 		return
