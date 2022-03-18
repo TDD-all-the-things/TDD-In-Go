@@ -1,4 +1,4 @@
-module longyue0521/TDD-In-Go
+module github.com/longyue0521/TDD-In-Go
 
 go 1.17
 
