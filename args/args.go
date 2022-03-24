@@ -2,7 +2,8 @@ package args
 
 import "strconv"
 
-func Parse(option *Option, flags ...string) {
+func Parse(v interface{}, flags ...string) {
+	option, _ := v.(*Option)
 	for i, flag := range flags {
 		if flag == "-l" {
 			option.logging = true
