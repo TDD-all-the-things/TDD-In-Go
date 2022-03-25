@@ -7,9 +7,7 @@ import (
 
 func Parse(v interface{}, options ...string) {
 	obj := reflect.ValueOf(v).Elem()
-	if !obj.CanSet() {
-		return
-	}
+
 	for i := 0; i < obj.NumField(); i++ {
 		field := obj.Type().Field(i)
 		if field.IsExported() {

@@ -110,6 +110,8 @@ type ListOption struct {
    - ~~string `""`~~
 5. Handle Error
    - v in args.Parse is not an pointer of struct?
+   - v is CanSet?CanAddr?
    - v's field is unexported?
+   - v's field CanSet?
    - v's field don't have "args" tag
    - v's field has "args" tag, but it's empty
