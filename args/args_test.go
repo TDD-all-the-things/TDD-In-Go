@@ -50,3 +50,18 @@ func TestParseOption(t *testing.T) {
 		})
 	}
 }
+
+type AnotherOption struct {
+	L bool
+	P int
+	D string
+}
+
+func TestParseAnotherOption_NoOption_ReturnsDefaultValue(t *testing.T) {
+	var actual AnotherOption
+	args.Parse(&actual)
+
+	assert.Equal(t, false, actual.L)
+	assert.Equal(t, 0, actual.P)
+	assert.Equal(t, "", actual.D)
+}
