@@ -11,7 +11,7 @@ func TestParseOption(t *testing.T) {
 
 	testcases := map[string]struct {
 		flags    []string
-		expected args.Option
+		expected interface{}
 	}{
 		"no flags": {
 			flags:    []string{},
@@ -58,7 +58,7 @@ type AnotherOption struct {
 func TestParseAnotherOption(t *testing.T) {
 	testcases := map[string]struct {
 		flags    []string
-		expected AnotherOption
+		expected interface{}
 	}{
 		"no flags should get default value": {
 			flags:    []string{},
