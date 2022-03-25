@@ -8,12 +8,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type Option struct {
-	Logging   bool
-	Port      int
-	Directory string
-}
-
 func TestParse(t *testing.T) {
 
 	testcases := map[string]struct {
@@ -78,6 +72,12 @@ func TestParse(t *testing.T) {
 
 func NewActual(t interface{}) interface{} {
 	return reflect.New(reflect.TypeOf(t).Elem()).Interface()
+}
+
+type Option struct {
+	Logging   bool
+	Port      int
+	Directory string
 }
 
 type AnotherOption struct {
