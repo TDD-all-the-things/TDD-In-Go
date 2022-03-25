@@ -57,13 +57,31 @@ type AnotherOption struct {
 	D string
 }
 
-func TestParseAnotherOption_NoOption_ReturnsDefaultValue(t *testing.T) {
-	var actual AnotherOption
-	args.Parse(&actual)
+func TestParseAnotherOption(t *testing.T) {
+	testcases := map[string]struct {
+		flags    []string
+		expected AnotherOption
+	}{
+		"no flags should get default value": {
+			flags:    []string{},
+			expected: AnotherOption{},
+		},
+	}
 
-	assert.Equal(t, false, actual.L)
-	assert.Equal(t, 0, actual.P)
-	assert.Equal(t, "", actual.D)
+	for name, tt := range testcases {
+		t.Run(name, func(t *testing.T) {
+			// 注意:并发问题
+			tt := tt
+			// 利用多核,并行运行
+			t.Parallel()
+
+			var actual AnotherOption
+			args.Parse(&actual, tt.flags...)
+			assert.Equal(t, tt.expected.L, actual.L)
+			assert.Equal(t, tt.expected.P, actual.P)
+			assert.Equal(t, tt.expected.D, actual.D)
+		})
+	}
 }
 
 func TestParseAnotherOption_LOptionOnly_ReturnsTrue(t *testing.T) {
