@@ -19,19 +19,19 @@ func TestParseOption(t *testing.T) {
 		},
 		"-l only": {
 			flags:    []string{"-l"},
-			expected: args.NewOption(true, 0, ""),
+			expected: args.Option{true, 0, ""},
 		},
 		"-p only": {
 			flags:    []string{"-p", "8080"},
-			expected: args.NewOption(false, 8080, ""),
+			expected: args.Option{false, 8080, ""},
 		},
 		"-d only": {
 			flags:    []string{"-d", "/usr/logs"},
-			expected: args.NewOption(false, 0, "/usr/logs"),
+			expected: args.Option{false, 0, "/usr/logs"},
 		},
 		"multiple flags '-l -p 9090 -d /usr/vars'": {
 			flags:    []string{"-l", "-p", "9090", "-d", "/usr/vars"},
-			expected: args.NewOption(true, 9090, "/usr/vars"),
+			expected: args.Option{true, 9090, "/usr/vars"},
 		},
 	}
 
