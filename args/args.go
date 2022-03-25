@@ -16,6 +16,11 @@ func Parse(v interface{}, flags ...string) {
 			}
 			option.logging = true
 		} else if flag == "-p" {
+			if obj.CanSet() && obj.Type().Field(1).IsExported() {
+				p, _ := strconv.Atoi(flags[i+1])
+				obj.Field(1).SetInt(int64(p))
+				continue
+			}
 			option.port, _ = strconv.Atoi(flags[i+1])
 		} else if flag == "-d" {
 			option.directory = flags[i+1]
