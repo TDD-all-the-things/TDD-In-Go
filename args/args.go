@@ -13,14 +13,14 @@ func Parse(v interface{}, flags ...string) {
 
 	var val interface{}
 	if obj.Type().Field(0).IsExported() {
-		val = parseBoolOption(obj, flags)
+		val = parseOption(obj.Type().Field(0), flags)
 		if val != nil {
 			obj.Field(0).Set(reflect.ValueOf(val))
 		}
 	}
 
 	if obj.Type().Field(1).IsExported() {
-		val := parseIntOption(obj, flags)
+		val := parseOption(obj.Type().Field(1), flags)
 		if val != nil {
 			obj.Field(1).Set(reflect.ValueOf(val))
 		}
@@ -36,10 +36,6 @@ func Parse(v interface{}, flags ...string) {
 			obj.Field(2).Set(reflect.ValueOf(val))
 		}
 	}
-}
-
-func parseBoolOption(obj reflect.Value, options []string) interface{} {
-	return parseOption(obj.Type().Field(0), options)
 }
 
 func parseOption(field reflect.StructField, options []string) interface{} {
@@ -60,10 +56,6 @@ func parseOption(field reflect.StructField, options []string) interface{} {
 		}
 	}
 	return val
-}
-
-func parseIntOption(obj reflect.Value, options []string) interface{} {
-	return parseOption(obj.Type().Field(1), options)
 }
 
 func indexOf(options []string, option string) int {
