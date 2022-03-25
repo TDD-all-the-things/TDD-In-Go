@@ -1,11 +1,19 @@
 package args
 
-import "strconv"
+import (
+	"reflect"
+	"strconv"
+)
 
 func Parse(v interface{}, flags ...string) {
 	option, _ := v.(*Option)
+	obj := reflect.ValueOf(v).Elem()
 	for i, flag := range flags {
 		if flag == "-l" {
+			if obj.CanSet() && obj.Type().Field(0).IsExported() {
+				obj.Field(0).SetBool(true)
+				continue
+			}
 			option.logging = true
 		} else if flag == "-p" {
 			option.port, _ = strconv.Atoi(flags[i+1])
