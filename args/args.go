@@ -53,13 +53,6 @@ func parseOption(field reflect.StructField, options []string) interface{} {
 			val = true
 		}
 	}
-	return val
-}
-
-func parseIntOption(obj reflect.Value, options []string) interface{} {
-	field := obj.Type().Field(1)
-	i := indexOf(options, "-"+field.Tag.Get("args"))
-	var val interface{}
 	if field.Type.String() == "int" {
 		if i < 0 {
 			val = 0
@@ -68,6 +61,11 @@ func parseIntOption(obj reflect.Value, options []string) interface{} {
 		}
 	}
 	return val
+}
+
+func parseIntOption(obj reflect.Value, options []string) interface{} {
+	field := obj.Type().Field(1)
+	return parseOption(field, options)
 }
 
 func indexOf(options []string, option string) int {
