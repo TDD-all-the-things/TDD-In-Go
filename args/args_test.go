@@ -44,9 +44,7 @@ func TestParseOption(t *testing.T) {
 
 			var actual args.Option
 			args.Parse(&actual, tt.flags...)
-			assert.Equal(t, tt.expected.Logging(), actual.Logging())
-			assert.Equal(t, tt.expected.Port(), actual.Port())
-			assert.Equal(t, tt.expected.Directory(), actual.Directory())
+			assert.Equal(t, tt.expected, actual)
 		})
 	}
 }
@@ -89,9 +87,7 @@ func TestParseAnotherOption(t *testing.T) {
 
 			var actual AnotherOption
 			args.Parse(&actual, tt.flags...)
-			assert.Equal(t, tt.expected.L, actual.L)
-			assert.Equal(t, tt.expected.P, actual.P)
-			assert.Equal(t, tt.expected.D, actual.D)
+			assert.Equal(t, tt.expected, actual)
 		})
 	}
 }
