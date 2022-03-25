@@ -10,24 +10,24 @@ func Parse(v interface{}, flags ...string) {
 	if !obj.CanSet() {
 		return
 	}
-	for _, flag := range flags {
-		if flag == "-l" {
-			if obj.Type().Field(0).IsExported() {
+	if obj.Type().Field(0).IsExported() {
+		for _, flag := range flags {
+			if flag == "-l" {
 				obj.Field(0).SetBool(true)
 			}
 		}
 	}
-	for i, flag := range flags {
-		if flag == "-p" {
-			if obj.Type().Field(1).IsExported() {
+	if obj.Type().Field(1).IsExported() {
+		for i, flag := range flags {
+			if flag == "-p" {
 				p, _ := strconv.Atoi(flags[i+1])
 				obj.Field(1).SetInt(int64(p))
 			}
 		}
 	}
-	for i, flag := range flags {
-		if flag == "-d" {
-			if obj.Type().Field(2).IsExported() {
+	if obj.Type().Field(2).IsExported() {
+		for i, flag := range flags {
+			if flag == "-d" {
 				obj.Field(2).SetString(flags[i+1])
 			}
 		}
