@@ -17,9 +17,10 @@ func Parse(v interface{}, options ...string) {
 }
 
 func parseOption(field reflect.StructField, options []string) interface{} {
-	i := indexOf(options, "-"+field.Tag.Get("args"))
 	var val interface{}
 	if field.Type.String() == "bool" {
+		option := field.Tag.Get("args")
+		i := indexOf(options, "-"+option)
 		if i < 0 {
 			val = false
 		} else {
@@ -27,6 +28,8 @@ func parseOption(field reflect.StructField, options []string) interface{} {
 		}
 	}
 	if field.Type.String() == "int" {
+		option := field.Tag.Get("args")
+		i := indexOf(options, "-"+option)
 		if i < 0 {
 			val = 0
 		} else {
@@ -34,6 +37,8 @@ func parseOption(field reflect.StructField, options []string) interface{} {
 		}
 	}
 	if field.Type.String() == "string" {
+		option := field.Tag.Get("args")
+		i := indexOf(options, "-"+option)
 		if i < 0 {
 			val = ""
 		} else {
