@@ -66,6 +66,10 @@ func TestParseAnotherOption(t *testing.T) {
 			flags:    []string{},
 			expected: AnotherOption{},
 		},
+		"-l only should set true for bool field": {
+			flags:    []string{"-l"},
+			expected: AnotherOption{true, 0, ""},
+		},
 	}
 
 	for name, tt := range testcases {
@@ -82,13 +86,4 @@ func TestParseAnotherOption(t *testing.T) {
 			assert.Equal(t, tt.expected.D, actual.D)
 		})
 	}
-}
-
-func TestParseAnotherOption_LOptionOnly_ReturnsTrue(t *testing.T) {
-	var actual AnotherOption
-	args.Parse(&actual, "-l")
-
-	assert.Equal(t, true, actual.L)
-	assert.Equal(t, 0, actual.P)
-	assert.Equal(t, "", actual.D)
 }
