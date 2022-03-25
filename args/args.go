@@ -5,14 +5,15 @@ import (
 	"strconv"
 )
 
-func Parse(v interface{}, flags ...string) {
+func Parse(v interface{}, options ...string) {
 	obj := reflect.ValueOf(v).Elem()
 	if !obj.CanSet() {
 		return
 	}
 	for i := 0; i < obj.NumField(); i++ {
-		if obj.Type().Field(i).IsExported() {
-			obj.Field(i).Set(reflect.ValueOf(parseOption(obj.Type().Field(i), flags)))
+		field := obj.Type().Field(i)
+		if field.IsExported() {
+			obj.Field(i).Set(reflect.ValueOf(parseOption(field, options)))
 		}
 	}
 }
