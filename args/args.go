@@ -39,8 +39,7 @@ func Parse(v interface{}, flags ...string) {
 }
 
 func parseBoolOption(obj reflect.Value, options []string) interface{} {
-	field := obj.Type().Field(0)
-	return parseOption(field, options)
+	return parseOption(obj.Type().Field(0), options)
 }
 
 func parseOption(field reflect.StructField, options []string) interface{} {
@@ -64,8 +63,7 @@ func parseOption(field reflect.StructField, options []string) interface{} {
 }
 
 func parseIntOption(obj reflect.Value, options []string) interface{} {
-	field := obj.Type().Field(1)
-	return parseOption(field, options)
+	return parseOption(obj.Type().Field(1), options)
 }
 
 func indexOf(options []string, option string) int {
