@@ -40,6 +40,10 @@ func Parse(v interface{}, flags ...string) {
 
 func parseBoolOption(obj reflect.Value, options []string) interface{} {
 	field := obj.Type().Field(0)
+	return parseOption(field, options)
+}
+
+func parseOption(field reflect.StructField, options []string) interface{} {
 	i := indexOf(options, "-"+field.Tag.Get("args"))
 	var val interface{}
 	if field.Type.String() == "bool" {
