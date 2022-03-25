@@ -19,13 +19,8 @@ func Parse(v interface{}, flags ...string) {
 		}
 	}
 
-	val = (interface{})(nil)
 	if obj.Type().Field(1).IsExported() {
-		for i, flag := range flags {
-			if flag == "-p" && obj.Field(1).Type().String() == "int" {
-				val, _ = strconv.Atoi(flags[i+1])
-			}
-		}
+		val := parseIntOption(obj, flags)
 		if val != nil {
 			obj.Field(1).Set(reflect.ValueOf(val))
 		}
@@ -51,6 +46,19 @@ func parseBoolOption(obj reflect.Value, options []string) interface{} {
 			val = false
 		} else {
 			val = true
+		}
+	}
+	return val
+}
+
+func parseIntOption(obj reflect.Value, options []string) interface{} {
+	i := indexOf(options, "-p")
+	var val interface{}
+	if obj.Field(1).Type().String() == "int" {
+		if i < 0 {
+			val = 0
+		} else {
+			val, _ = strconv.Atoi(options[i+1])
 		}
 	}
 	return val
