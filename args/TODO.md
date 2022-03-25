@@ -111,3 +111,5 @@ type ListOption struct {
 5. Handle Error
    - v in args.Parse is not an pointer of struct?
    - v's field is unexported?
+   - v's field don't have "args" tag
+   - v's field has "args" tag, but it's empty
