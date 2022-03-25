@@ -75,13 +75,13 @@ func NewActual(t interface{}) interface{} {
 }
 
 type Option struct {
-	Logging   bool
-	Port      int
-	Directory string
+	Logging   bool   `args:"l"`
+	Port      int    `args:"p"`
+	Directory string `args:"d"`
 }
 
 type AnotherOption struct {
-	L bool
-	P int
-	D string
+	L bool   `args:"l"`
+	P int    `args:"p"`
+	D string `args:"d"`
 }
