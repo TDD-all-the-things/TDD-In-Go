@@ -7,6 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type Option struct {
+	Logging   bool
+	Port      int
+	Directory string
+}
+
 func TestParseOption(t *testing.T) {
 
 	testcases := map[string]struct {
@@ -15,23 +21,23 @@ func TestParseOption(t *testing.T) {
 	}{
 		"no flags": {
 			flags:    []string{},
-			expected: args.Option{},
+			expected: Option{},
 		},
 		"-l only": {
 			flags:    []string{"-l"},
-			expected: args.Option{true, 0, ""},
+			expected: Option{true, 0, ""},
 		},
 		"-p only": {
 			flags:    []string{"-p", "8080"},
-			expected: args.Option{false, 8080, ""},
+			expected: Option{false, 8080, ""},
 		},
 		"-d only": {
 			flags:    []string{"-d", "/usr/logs"},
-			expected: args.Option{false, 0, "/usr/logs"},
+			expected: Option{false, 0, "/usr/logs"},
 		},
 		"multiple flags '-l -p 9090 -d /usr/vars'": {
 			flags:    []string{"-l", "-p", "9090", "-d", "/usr/vars"},
-			expected: args.Option{true, 9090, "/usr/vars"},
+			expected: Option{true, 9090, "/usr/vars"},
 		},
 	}
 
@@ -42,7 +48,7 @@ func TestParseOption(t *testing.T) {
 			// 利用多核,并行运行
 			t.Parallel()
 
-			var actual args.Option
+			var actual Option
 			args.Parse(&actual, tt.flags...)
 			assert.Equal(t, tt.expected, actual)
 		})

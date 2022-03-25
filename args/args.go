@@ -28,8 +28,4 @@ func Parse(v interface{}, flags ...string) {
 	}
 }
 
-type Option struct {
-	Logging   bool
-	Port      int
-	Directory string
-}
+
