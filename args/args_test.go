@@ -70,6 +70,10 @@ func TestParseAnotherOption(t *testing.T) {
 			flags:    []string{"-l"},
 			expected: AnotherOption{true, 0, ""},
 		},
+		"-p only": {
+			flags:    []string{"-p", "8080"},
+			expected: AnotherOption{false, 8080, ""},
+		},
 	}
 
 	for name, tt := range testcases {
