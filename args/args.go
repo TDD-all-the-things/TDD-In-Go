@@ -11,26 +11,16 @@ func Parse(v interface{}, flags ...string) {
 		return
 	}
 
-	var val interface{}
 	if obj.Type().Field(0).IsExported() {
-		val = parseOption(obj.Type().Field(0), flags)
-		if val != nil {
-			obj.Field(0).Set(reflect.ValueOf(val))
-		}
+		obj.Field(0).Set(reflect.ValueOf(parseOption(obj.Type().Field(0), flags)))
 	}
 
 	if obj.Type().Field(1).IsExported() {
-		val := parseOption(obj.Type().Field(1), flags)
-		if val != nil {
-			obj.Field(1).Set(reflect.ValueOf(val))
-		}
+		obj.Field(1).Set(reflect.ValueOf(parseOption(obj.Type().Field(1), flags)))
 	}
-	val = (interface{})(nil)
+
 	if obj.Type().Field(2).IsExported() {
-		val := parseOption(obj.Type().Field(2), flags)
-		if val != nil {
-			obj.Field(2).Set(reflect.ValueOf(val))
-		}
+		obj.Field(2).Set(reflect.ValueOf(parseOption(obj.Type().Field(2), flags)))
 	}
 }
 
