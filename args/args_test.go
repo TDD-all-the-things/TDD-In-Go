@@ -65,3 +65,12 @@ func TestParseAnotherOption_NoOption_ReturnsDefaultValue(t *testing.T) {
 	assert.Equal(t, 0, actual.P)
 	assert.Equal(t, "", actual.D)
 }
+
+func TestParseAnotherOption_LOptionOnly_ReturnsTrue(t *testing.T) {
+	var actual AnotherOption
+	args.Parse(&actual, "-l")
+
+	assert.Equal(t, true, actual.L)
+	assert.Equal(t, 0, actual.P)
+	assert.Equal(t, "", actual.D)
+}
