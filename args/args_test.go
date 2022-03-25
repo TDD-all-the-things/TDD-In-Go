@@ -73,19 +73,19 @@ func TestParseAnotherOption(t *testing.T) {
 	}{
 		"no flags should get default value": {
 			flags:    []string{},
-			expected: AnotherOption{},
+			expected: &AnotherOption{},
 		},
 		"-l only should set true for bool field": {
 			flags:    []string{"-l"},
-			expected: AnotherOption{true, 0, ""},
+			expected: &AnotherOption{true, 0, ""},
 		},
 		"-p only": {
 			flags:    []string{"-p", "8080"},
-			expected: AnotherOption{false, 8080, ""},
+			expected: &AnotherOption{false, 8080, ""},
 		},
 		"-d only": {
 			flags:    []string{"-d", "/usr/logs"},
-			expected: AnotherOption{false, 0, "/usr/logs"},
+			expected: &AnotherOption{false, 0, "/usr/logs"},
 		},
 	}
 
@@ -96,8 +96,8 @@ func TestParseAnotherOption(t *testing.T) {
 			// 利用多核,并行运行
 			t.Parallel()
 
-			var actual AnotherOption
-			args.Parse(&actual, tt.flags...)
+			actual := NewActual(tt.expected)
+			args.Parse(actual, tt.flags...)
 			assert.Equal(t, tt.expected, actual)
 		})
 	}
