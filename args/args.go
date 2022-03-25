@@ -27,19 +27,7 @@ func Parse(v interface{}, flags ...string) {
 	}
 	val = (interface{})(nil)
 	if obj.Type().Field(2).IsExported() {
-		j := -1
-		for i, flag := range flags {
-			if flag == "-d"{
-				j = i
-			}
-		}
-		if obj.Field(2).Type().String() == "string" {
-			if j < 0 {
-				val = ""
-			} else {
-				val = flags[j+1]
-			}
-		}
+		val := parseOption(obj.Type().Field(2), flags)
 		if val != nil {
 			obj.Field(2).Set(reflect.ValueOf(val))
 		}
@@ -61,6 +49,13 @@ func parseOption(field reflect.StructField, options []string) interface{} {
 			val = 0
 		} else {
 			val, _ = strconv.Atoi(options[i+1])
+		}
+	}
+	if field.Type.String() == "string" {
+		if i < 0 {
+			val = ""
+		} else {
+			val = options[i+1]
 		}
 	}
 	return val
