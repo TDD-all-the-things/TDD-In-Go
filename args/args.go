@@ -53,9 +53,10 @@ func parseBoolOption(obj reflect.Value, options []string) interface{} {
 }
 
 func parseIntOption(obj reflect.Value, options []string) interface{} {
-	i := indexOf(options, "-p")
+	field := obj.Type().Field(1)
+	i := indexOf(options, "-"+field.Tag.Get("args"))
 	var val interface{}
-	if obj.Field(1).Type().String() == "int" {
+	if field.Type.String() == "int" {
 		if i < 0 {
 			val = 0
 		} else {
