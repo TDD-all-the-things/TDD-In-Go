@@ -39,9 +39,10 @@ func Parse(v interface{}, flags ...string) {
 }
 
 func parseBoolOption(obj reflect.Value, options []string) interface{} {
-	i := indexOf(options, "-l")
+	field := obj.Type().Field(0)
+	i := indexOf(options, "-"+field.Tag.Get("args"))
 	var val interface{}
-	if obj.Field(0).Type().String() == "bool" {
+	if field.Type.String() == "bool" {
 		if i < 0 {
 			val = false
 		} else {
