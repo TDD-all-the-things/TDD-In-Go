@@ -109,3 +109,5 @@ type ListOption struct {
    - ~~int `0`~~
    - ~~string `""`~~
 5. Handle Error
+   - v in args.Parse is not an pointer of struct?
+   - v's field is unexported?
