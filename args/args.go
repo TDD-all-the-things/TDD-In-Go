@@ -27,9 +27,17 @@ func Parse(v interface{}, flags ...string) {
 	}
 	val = (interface{})(nil)
 	if obj.Type().Field(2).IsExported() {
+		j := -1
 		for i, flag := range flags {
-			if flag == "-d" && obj.Field(2).Type().String() == "string" {
-				val = flags[i+1]
+			if flag == "-d"{
+				j = i
+			}
+		}
+		if obj.Field(2).Type().String() == "string" {
+			if j < 0 {
+				val = ""
+			} else {
+				val = flags[j+1]
 			}
 		}
 		if val != nil {
