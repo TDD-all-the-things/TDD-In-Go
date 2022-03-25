@@ -13,12 +13,7 @@ func Parse(v interface{}, flags ...string) {
 
 	var val interface{}
 	if obj.Type().Field(0).IsExported() {
-		val = false
-		for _, flag := range flags {
-			if flag == "-l" && obj.Field(0).Type().String() == "bool" {
-				val = true
-			}
-		}
+		val = parseBoolOption(obj, flags)
 		if val != nil {
 			obj.Field(0).Set(reflect.ValueOf(val))
 		}
@@ -46,4 +41,26 @@ func Parse(v interface{}, flags ...string) {
 			obj.Field(2).Set(reflect.ValueOf(val))
 		}
 	}
+}
+
+func parseBoolOption(obj reflect.Value, options []string) interface{} {
+	i := indexOf(options, "-l")
+	var val interface{}
+	if obj.Field(0).Type().String() == "bool" {
+		if i < 0 {
+			val = false
+		} else {
+			val = true
+		}
+	}
+	return val
+}
+
+func indexOf(options []string, option string) int {
+	for i, opt := range options {
+		if opt == option {
+			return i
+		}
+	}
+	return -1
 }
