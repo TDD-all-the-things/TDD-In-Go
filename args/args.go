@@ -10,14 +10,10 @@ func Parse(v interface{}, flags ...string) {
 	if !obj.CanSet() {
 		return
 	}
-	for i := 0; i < 2; i++ {
+	for i := 0; i < obj.NumField(); i++ {
 		if obj.Type().Field(i).IsExported() {
 			obj.Field(i).Set(reflect.ValueOf(parseOption(obj.Type().Field(i), flags)))
 		}
-	}
-
-	if obj.Type().Field(2).IsExported() {
-		obj.Field(2).Set(reflect.ValueOf(parseOption(obj.Type().Field(2), flags)))
 	}
 }
 
