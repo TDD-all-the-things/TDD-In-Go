@@ -23,6 +23,10 @@ func Parse(v interface{}, flags ...string) {
 			}
 			option.port, _ = strconv.Atoi(flags[i+1])
 		} else if flag == "-d" {
+			if obj.CanSet() && obj.Type().Field(2).IsExported() {
+				obj.Field(2).SetString(flags[i+1])
+				continue
+			}
 			option.directory = flags[i+1]
 		}
 	}
