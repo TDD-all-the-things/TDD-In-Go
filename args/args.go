@@ -32,9 +32,7 @@ var PARSERS map[string]OptionParser = map[string]OptionParser{
 }
 
 func getParser(typ string) OptionParser {
-	var parser OptionParser
-	parser = PARSERS[typ]
-	return parser
+	return PARSERS[typ]
 }
 
 func indexOf(options []string, option string) int {
