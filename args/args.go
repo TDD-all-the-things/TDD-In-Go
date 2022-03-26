@@ -20,21 +20,17 @@ func parseOption(field reflect.StructField, options []string) interface{} {
 	var val interface{}
 	var parser OptionParser
 
+	option := field.Tag.Get("args")
 	if field.Type.String() == "bool" {
-		option := field.Tag.Get("args")
 		parser = BoolOptionParser()
-		val = parser.Parse(options, option)
 	}
 	if field.Type.String() == "int" {
-		option := field.Tag.Get("args")
 		parser = SingleValueOptionParser(0, func(s string) (interface{}, error) { return strconv.Atoi(s) })
-		val = parser.Parse(options, option)
 	}
 	if field.Type.String() == "string" {
-		option := field.Tag.Get("args")
 		parser = SingleValueOptionParser("", func(s string) (interface{}, error) { return s, nil })
-		val = parser.Parse(options, option)
 	}
+	val = parser.Parse(options, option)
 	return val
 }
 
