@@ -20,30 +20,48 @@ func parseOption(field reflect.StructField, options []string) interface{} {
 	var val interface{}
 	if field.Type.String() == "bool" {
 		option := field.Tag.Get("args")
-		i := indexOf(options, "-"+option)
-		if i < 0 {
-			val = false
-		} else {
-			val = true
-		}
+		val = parseBoolOption(options, option)
 	}
 	if field.Type.String() == "int" {
 		option := field.Tag.Get("args")
-		i := indexOf(options, "-"+option)
-		if i < 0 {
-			val = 0
-		} else {
-			val, _ = strconv.Atoi(options[i+1])
-		}
+		val = parseIntOption(options, option)
 	}
 	if field.Type.String() == "string" {
 		option := field.Tag.Get("args")
-		i := indexOf(options, "-"+option)
-		if i < 0 {
-			val = ""
-		} else {
-			val = options[i+1]
-		}
+		val = parseStringOption(options, option)
+	}
+	return val
+}
+
+func parseStringOption(options []string, option string) interface{} {
+	var val interface{}
+	i := indexOf(options, "-"+option)
+	if i < 0 {
+		val = ""
+	} else {
+		val = options[i+1]
+	}
+	return val
+}
+
+func parseIntOption(options []string, option string) interface{} {
+	var val interface{}
+	i := indexOf(options, "-"+option)
+	if i < 0 {
+		val = 0
+	} else {
+		val, _ = strconv.Atoi(options[i+1])
+	}
+	return val
+}
+
+func parseBoolOption(options []string, option string) interface{} {
+	var val interface{}
+	i := indexOf(options, "-"+option)
+	if i < 0 {
+		val = false
+	} else {
+		val = true
 	}
 	return val
 }
