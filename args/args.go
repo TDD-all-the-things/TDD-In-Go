@@ -91,12 +91,10 @@ func SingleValueOptionParser(defaultValue interface{}, parseValueFunc func(s str
 }
 
 func (p *singleValueOptionParser) Parse(options []string, option string) interface{} {
-	var val interface{}
 	i := indexOf(options, "-"+option)
 	if i < 0 {
-		val = p.defaultValue
-	} else {
-		val, _ = p.parseValueFunc(options[i+1])
+		return p.defaultValue
 	}
+	val, _ := p.parseValueFunc(options[i+1])
 	return val
 }
