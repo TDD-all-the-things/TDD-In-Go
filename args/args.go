@@ -18,9 +18,12 @@ func Parse(v interface{}, options ...string) {
 
 func parseOption(field reflect.StructField, options []string) interface{} {
 	var val interface{}
+	var parser OptionParser
+
 	if field.Type.String() == "bool" {
 		option := field.Tag.Get("args")
-		val = parseBoolOption(options, option)
+		parser = BoolOptionParser()
+		val = parser.Parse(options, option)
 	}
 	if field.Type.String() == "int" {
 		option := field.Tag.Get("args")
@@ -55,17 +58,6 @@ func parseIntOption(options []string, option string) interface{} {
 	return val
 }
 
-func parseBoolOption(options []string, option string) interface{} {
-	var val interface{}
-	i := indexOf(options, "-"+option)
-	if i < 0 {
-		val = false
-	} else {
-		val = true
-	}
-	return val
-}
-
 func indexOf(options []string, option string) int {
 	for i, opt := range options {
 		if opt == option {
@@ -73,4 +65,21 @@ func indexOf(options []string, option string) int {
 		}
 	}
 	return -1
+}
+
+type OptionParser interface {
+	Parse(options []string, option string) interface{}
+}
+
+type boolOptionParser struct {}
+
+func BoolOptionParser() OptionParser {
+	return &boolOptionParser{}
+}
+
+func (p *boolOptionParser) Parse(options []string, option string) interface{} {
+	if indexOf(options, "-"+option) < 0 {
+		return false
+	}
+	return true
 }
