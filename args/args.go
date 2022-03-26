@@ -38,22 +38,30 @@ func parseOption(field reflect.StructField, options []string) interface{} {
 
 func parseStringOption(options []string, option string) interface{} {
 	var val interface{}
+	defaultValue := ""
+	parseValue := func (s string) (interface{}, error) {
+		return s, nil
+	}
 	i := indexOf(options, "-"+option)
 	if i < 0 {
-		val = ""
+		val = defaultValue
 	} else {
-		val = options[i+1]
+		val, _ = parseValue(options[i+1])
 	}
 	return val
 }
 
 func parseIntOption(options []string, option string) interface{} {
 	var val interface{}
+	defaultValue := 0
+	parseValue := func (s string) (interface{}, error) {
+		return strconv.Atoi(s)
+	}
 	i := indexOf(options, "-"+option)
 	if i < 0 {
-		val = 0
+		val = defaultValue
 	} else {
-		val, _ = strconv.Atoi(options[i+1])
+		val, _ = parseValue(options[i+1])
 	}
 	return val
 }
