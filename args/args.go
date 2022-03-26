@@ -25,17 +25,15 @@ func parseOption(field reflect.StructField, options []string) interface{} {
 	return val
 }
 
+var PARSERS map[string]OptionParser = map[string]OptionParser{
+	"bool":   BoolOptionParser(),
+	"int":    SingleValueOptionParser(0, func(s string) (interface{}, error) { return strconv.Atoi(s) }),
+	"string": SingleValueOptionParser("", func(s string) (interface{}, error) { return s, nil }),
+}
+
 func getParser(typ string) OptionParser {
 	var parser OptionParser
-	if typ == "bool" {
-		parser = BoolOptionParser()
-	}
-	if typ == "int" {
-		parser = SingleValueOptionParser(0, func(s string) (interface{}, error) { return strconv.Atoi(s) })
-	}
-	if typ == "string" {
-		parser = SingleValueOptionParser("", func(s string) (interface{}, error) { return s, nil })
-	}
+	parser = PARSERS[typ]
 	return parser
 }
 
