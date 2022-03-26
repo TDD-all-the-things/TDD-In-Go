@@ -27,21 +27,13 @@ func parseOption(field reflect.StructField, options []string) interface{} {
 	}
 	if field.Type.String() == "int" {
 		option := field.Tag.Get("args")
-		val = parseIntOption(options, option)
+		val = SingleValueOptionParser(0, func(s string) (interface{}, error) { return strconv.Atoi(s) }).Parse(options, option)
 	}
 	if field.Type.String() == "string" {
 		option := field.Tag.Get("args")
-		val = parseStringOption(options, option)
+		val = SingleValueOptionParser("", func(s string) (interface{}, error) { return s, nil }).Parse(options, option)
 	}
 	return val
-}
-
-func parseStringOption(options []string, option string) interface{} {
-	return SingleValueOptionParser("", func(s string) (interface{}, error) { return s, nil }).Parse(options, option)
-}
-
-func parseIntOption(options []string, option string) interface{} {
-	return SingleValueOptionParser(0, func(s string) (interface{}, error) { return strconv.Atoi(s) }).Parse(options, option)
 }
 
 func indexOf(options []string, option string) int {
