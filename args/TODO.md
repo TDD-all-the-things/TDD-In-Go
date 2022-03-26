@@ -115,3 +115,5 @@ type ListOption struct {
    - v's field CanSet?
    - v's field don't have "args" tag
    - v's field has "args" tag, but it's empty
+   - func parserOption , if parser not found in PARSERS map?
+   - func Parse in OptionParser, parseValueFunc handle return error
