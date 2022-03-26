@@ -37,33 +37,19 @@ func parseOption(field reflect.StructField, options []string) interface{} {
 }
 
 func parseStringOption(options []string, option string) interface{} {
-	var val interface{}
 	defaultValue := ""
 	parseValue := func (s string) (interface{}, error) {
 		return s, nil
 	}
-	i := indexOf(options, "-"+option)
-	if i < 0 {
-		val = defaultValue
-	} else {
-		val, _ = parseValue(options[i+1])
-	}
-	return val
+	return SingleValueOptionParser(defaultValue, parseValue).Parse(options, option)
 }
 
 func parseIntOption(options []string, option string) interface{} {
-	var val interface{}
 	defaultValue := 0
 	parseValue := func (s string) (interface{}, error) {
 		return strconv.Atoi(s)
 	}
-	i := indexOf(options, "-"+option)
-	if i < 0 {
-		val = defaultValue
-	} else {
-		val, _ = parseValue(options[i+1])
-	}
-	return val
+	return SingleValueOptionParser(defaultValue, parseValue).Parse(options, option)
 }
 
 func indexOf(options []string, option string) int {
@@ -90,4 +76,28 @@ func (p *boolOptionParser) Parse(options []string, option string) interface{} {
 		return false
 	}
 	return true
+}
+
+type singleValueOptionParser struct {
+	defaultValue interface{}
+	parseValueFunc func (s string) (interface{}, error)
+}
+
+func SingleValueOptionParser(defaultValue interface{}, parseValueFunc func (s string) (interface{}, error)) OptionParser {
+	return &singleValueOptionParser{
+		defaultValue: defaultValue,
+		parseValueFunc: parseValueFunc,
+	}
+}
+
+func (p *singleValueOptionParser) Parse(options []string, option string) interface{} {
+	var val interface{}
+	i := indexOf(options, "-"+option)
+	if i < 0 {
+		val = p.defaultValue
+	} else {
+		val, _ = p.parseValueFunc(options[i+1])
+	}
+	return val
+
 }
