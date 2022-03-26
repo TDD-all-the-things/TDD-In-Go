@@ -19,7 +19,7 @@ func Parse(v interface{}, options ...string) {
 func parseOption(field reflect.StructField, options []string) interface{} {
 	var val interface{}
 	typ := field.Type.String()
-	parser := getParser(typ)
+	parser := PARSERS[typ]
 	option := field.Tag.Get("args")
 	val = parser.Parse(options, option)
 	return val
@@ -29,10 +29,6 @@ var PARSERS map[string]OptionParser = map[string]OptionParser{
 	"bool":   BoolOptionParser(),
 	"int":    SingleValueOptionParser(0, func(s string) (interface{}, error) { return strconv.Atoi(s) }),
 	"string": SingleValueOptionParser("", func(s string) (interface{}, error) { return s, nil }),
-}
-
-func getParser(typ string) OptionParser {
-	return PARSERS[typ]
 }
 
 func indexOf(options []string, option string) int {
