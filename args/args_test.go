@@ -18,41 +18,21 @@ func TestParse(t *testing.T) {
 			flags:    []string{},
 			expected: &Option{},
 		},
-		"no flags another": {
-			flags:    []string{},
-			expected: &AnotherOption{},
-		},
 		"-l only": {
 			flags:    []string{"-l"},
 			expected: &Option{true, 0, ""},
-		},
-		"-l only another": {
-			flags:    []string{"-l"},
-			expected: &AnotherOption{true, 0, ""},
 		},
 		"-p only": {
 			flags:    []string{"-p", "8080"},
 			expected: &Option{false, 8080, ""},
 		},
-		"-p only another": {
-			flags:    []string{"-p", "8080"},
-			expected: &AnotherOption{false, 8080, ""},
-		},
 		"-d only": {
 			flags:    []string{"-d", "/usr/logs"},
 			expected: &Option{false, 0, "/usr/logs"},
 		},
-		"-d only another": {
-			flags:    []string{"-d", "/usr/logs"},
-			expected: &AnotherOption{false, 0, "/usr/logs"},
-		},
 		"multiple flags '-l -p 9090 -d /usr/vars'": {
 			flags:    []string{"-l", "-p", "9090", "-d", "/usr/vars"},
 			expected: &Option{true, 9090, "/usr/vars"},
-		},
-		"multiple flags '-l -p 9090 -d /usr/vars' another": {
-			flags:    []string{"-l", "-p", "9090", "-d", "/usr/vars"},
-			expected: &AnotherOption{true, 9090, "/usr/vars"},
 		},
 	}
 
@@ -78,10 +58,4 @@ type Option struct {
 	Logging   bool   `args:"l"`
 	Port      int    `args:"p"`
 	Directory string `args:"d"`
-}
-
-type AnotherOption struct {
-	L bool   `args:"l"`
-	P int    `args:"p"`
-	D string `args:"d"`
 }
