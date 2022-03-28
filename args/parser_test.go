@@ -39,6 +39,14 @@ func TestBoolOptionParser(t *testing.T) {
 				return assert.NoError(t, err)
 			},
 		},
+		"should set value to true if bool option present": {
+			options:  []string{"-l"},
+			option:   "l",
+			expected: (interface{})(true),
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.NoError(t, err)
+			},
+		},
 	}
 
 	for name, tt := range testcases {
