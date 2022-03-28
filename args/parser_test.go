@@ -30,6 +30,14 @@ func TestBoolOptionParser(t *testing.T) {
 				return assert.ErrorIs(t, err, args.ErrTooManyArguments)
 			},
 		},
+		"should get default value if bool option not present": {
+			options:  []string{},
+			option:   "l",
+			expected: (interface{})(false),
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.NoError(t, err)
+			},
+		},
 	}
 
 	for name, tt := range testcases {
@@ -39,11 +47,4 @@ func TestBoolOptionParser(t *testing.T) {
 			tt.assertion(t, err)
 		})
 	}
-}
-
-func TestBoolOptionParser_NoFlag_ReturnsDefaultValue(t *testing.T) {
-	options, option := []string{"t", "f"}, "l"
-	value, err := args.BoolOptionParser().Parse(options, option)
-	assert.Equal(t, false, value)
-	assert.NoError(t, err)
 }
