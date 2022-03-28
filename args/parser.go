@@ -8,6 +8,7 @@ import (
 
 var (
 	ErrTooManyArguments = errors.New("too many arguments")
+	ErrMissingArgument  = errors.New("missing argument")
 )
 
 type OptionParser interface {
