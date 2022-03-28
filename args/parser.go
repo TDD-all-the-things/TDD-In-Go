@@ -1,6 +1,10 @@
 package args
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+	"strings"
+)
 
 var (
 	ErrTooManyArguments = errors.New("too many arguments")
@@ -17,8 +21,12 @@ func BoolOptionParser() OptionParser {
 }
 
 func (p *boolOptionParser) Parse(options []string, option string) (interface{}, error) {
-	if indexOf(options, "-"+option) < 0 {
+	i := indexOf(options, "-"+option)
+	if i < 0 {
 		return false, nil
+	}
+	if !strings.HasPrefix(options[i+1], "-") {
+		return nil, fmt.Errorf("%w", ErrTooManyArguments)
 	}
 	return true, nil
 }
