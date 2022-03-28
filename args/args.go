@@ -17,7 +17,9 @@ func Parse(v interface{}, options ...string) {
 }
 
 func parseOption(field reflect.StructField, options []string) interface{} {
-	return PARSERS[field.Type.String()].Parse(options, field.Tag.Get("args"))
+	parser := PARSERS[field.Type.String()]
+	value, _ := parser.Parse(options, field.Tag.Get("args"))
+	return value
 }
 
 var PARSERS map[string]OptionParser = map[string]OptionParser{

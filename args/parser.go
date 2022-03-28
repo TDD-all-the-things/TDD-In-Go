@@ -1,7 +1,13 @@
 package args
 
+import "errors"
+
+var (
+	ErrTooManyArguments = errors.New("too many arguments")
+)
+
 type OptionParser interface {
-	Parse(options []string, option string) interface{}
+	Parse(options []string, option string) (interface{}, error)
 }
 
 type boolOptionParser struct{}
@@ -10,11 +16,11 @@ func BoolOptionParser() OptionParser {
 	return &boolOptionParser{}
 }
 
-func (p *boolOptionParser) Parse(options []string, option string) interface{} {
+func (p *boolOptionParser) Parse(options []string, option string) (interface{}, error) {
 	if indexOf(options, "-"+option) < 0 {
-		return false
+		return false, nil
 	}
-	return true
+	return true, nil
 }
 
 type singleValueOptionParser struct {
@@ -29,13 +35,13 @@ func SingleValueOptionParser(defaultValue interface{}, parseValueFunc func(s str
 	}
 }
 
-func (p *singleValueOptionParser) Parse(options []string, option string) interface{} {
+func (p *singleValueOptionParser) Parse(options []string, option string) (interface{}, error) {
 	i := indexOf(options, "-"+option)
 	if i < 0 {
-		return p.defaultValue
+		return p.defaultValue, nil
 	}
 	val, _ := p.parseValueFunc(options[i+1])
-	return val
+	return val, nil
 }
 
 func indexOf(options []string, option string) int {
