@@ -48,6 +48,9 @@ func (p *singleValueOptionParser) Parse(options []string, option string) (interf
 	if i < 0 {
 		return p.defaultValue, nil
 	}
+	if !strings.HasPrefix(options[i+2], "-") {
+		return nil, fmt.Errorf("%w", ErrTooManyArguments)
+	}
 	val, _ := p.parseValueFunc(options[i+1])
 	return val, nil
 }
