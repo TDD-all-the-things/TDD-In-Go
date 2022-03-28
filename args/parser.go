@@ -25,7 +25,7 @@ func (p *boolOptionParser) Parse(options []string, option string) (interface{}, 
 	if i < 0 {
 		return false, nil
 	}
-	if !strings.HasPrefix(options[i+1], "-") {
+	if i+1 < len(options) && !strings.HasPrefix(options[i+1], "-") {
 		return nil, fmt.Errorf("%w", ErrTooManyArguments)
 	}
 	return true, nil
