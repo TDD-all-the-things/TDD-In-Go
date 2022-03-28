@@ -71,6 +71,18 @@ func TestSingleValueOptionParser(t *testing.T) {
 				return assert.ErrorIs(t, err, args.ErrTooManyArguments)
 			},
 		},
+		"should not missing argument for single value option": {
+			defaultValue: (interface{})(0),
+			parseFunc: func(s string) (interface{}, error) {
+				return strconv.Atoi(s)
+			},
+			options:  []string{"-p"},
+			option:   "p",
+			expected: (interface{})(nil),
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.ErrorIs(t, err, args.ErrMissingArgument)
+			},
+		},
 	}
 
 	for name, tt := range testcases {
@@ -80,17 +92,4 @@ func TestSingleValueOptionParser(t *testing.T) {
 			assert.Equal(t, tt.expected, actual)
 		})
 	}
-
-}
-
-func TestSingleValueOptionParser_should_not_missing_argument_for_single_value_option(t *testing.T) {
-	defaultValue := 0
-	parseFunc := func(s string) (interface{}, error) {
-		return strconv.Atoi(s)
-	}
-	options := []string{"-p"}
-	option := "p"
-	value, err := args.SingleValueOptionParser(defaultValue, parseFunc).Parse(options, option)
-	assert.Nil(t, value)
-	assert.ErrorIs(t, err, args.ErrMissingArgument)
 }
