@@ -7,11 +7,30 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestBoolOptionParser_WithExtraArgument_ReturnsError(t *testing.T) {
-	options, option := []string{"-l", "t"}, "l"
-	value, err := args.BoolOptionParser().Parse(options, option)
-	assert.Nil(t, value)
-	assert.ErrorIs(t, err, args.ErrTooManyArguments)
+func TestBoolOptionParser(t *testing.T) {
+	testcases := map[string]struct {
+		options   []string
+		option    string
+		expected  interface{}
+		assertion assert.ErrorAssertionFunc
+	}{
+		"should not accept extra argument for bool option": {
+			options:  []string{"-l", "t"},
+			option:   "l",
+			expected: (interface{})(nil),
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.ErrorIs(t, err, args.ErrTooManyArguments)
+			},
+		},
+	}
+
+	for name, tt := range testcases {
+		t.Run(name, func(t *testing.T) {
+			actual, err := args.BoolOptionParser().Parse(tt.options, tt.option)
+			assert.Equal(t, tt.expected, actual)
+			tt.assertion(t, err)
+		})
+	}
 }
 
 func TestBoolOptionParser_WithMoreExtraArguments_ReturnsError(t *testing.T) {
