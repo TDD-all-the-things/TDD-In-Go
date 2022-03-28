@@ -1,6 +1,7 @@
 package args_test
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/longyue0521/TDD-In-Go/args"
@@ -47,4 +48,16 @@ func TestBoolOptionParser(t *testing.T) {
 			tt.assertion(t, err)
 		})
 	}
+}
+
+func TestSingleValueOptionParser_should_not_accept_extra_argument_for_single_value_option(t *testing.T) {
+	defaultValue := 0
+	parseFunc := func(s string) (interface{}, error) {
+		return strconv.Atoi(s)
+	}
+	options := []string{"-p", "8080", "8081"}
+	option := "p"
+	value, err := args.SingleValueOptionParser(defaultValue, parseFunc).Parse(options, option)
+	assert.Nil(t, value)
+	assert.ErrorIs(t, err, args.ErrTooManyArguments)
 }
