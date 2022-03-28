@@ -83,6 +83,18 @@ func TestSingleValueOptionParser(t *testing.T) {
 				return assert.ErrorIs(t, err, args.ErrMissingArgument)
 			},
 		},
+		"should not missing argument for single value option but with another option": {
+			defaultValue: (interface{})(0),
+			parseFunc: func(s string) (interface{}, error) {
+				return strconv.Atoi(s)
+			},
+			options:  []string{"-p","-l"},
+			option:   "p",
+			expected: (interface{})(nil),
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.ErrorIs(t, err, args.ErrMissingArgument)
+			},
+		},
 		"should get default value if single value option present": {
 			defaultValue: (interface{})(0),
 			parseFunc: func(s string) (interface{}, error) {
