@@ -61,3 +61,15 @@ func TestSingleValueOptionParser_should_not_accept_extra_argument_for_single_val
 	assert.Nil(t, value)
 	assert.ErrorIs(t, err, args.ErrTooManyArguments)
 }
+
+func TestSingleValueOptionParser_should_not_missing_argument_for_single_value_option(t *testing.T) {
+	defaultValue := 0
+	parseFunc := func(s string) (interface{}, error) {
+		return strconv.Atoi(s)
+	}
+	options := []string{"-p"}
+	option := "p"
+	value, err := args.SingleValueOptionParser(defaultValue, parseFunc).Parse(options, option)
+	assert.Nil(t, value)
+	assert.ErrorIs(t, err, args.ErrMissingArgument)
+}
