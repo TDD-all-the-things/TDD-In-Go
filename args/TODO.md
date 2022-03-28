@@ -117,3 +117,25 @@ type ListOption struct {
    - v's field has "args" tag, but it's empty
    - func parserOption , if parser not found in PARSERS map?
    - func Parse in OptionParser, parseValueFunc handle return error
+
+### 调整测试
+
+1. BoolOptionParserTest
+   - sad path
+     - `-l t`
+     - `-l t f`
+   - default value
+     - false
+2. SingleValuedOptionParserTest
+   - int
+     - sad path
+       - int `-p` 
+       - int `-p 8080 8081`
+     - default value
+       - 0
+   - string
+     - sad path
+       - string, `-d`
+       - string, `-d /usr/logs /usr/vars`
+     - default value
+       - ""
