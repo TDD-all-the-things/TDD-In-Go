@@ -96,7 +96,7 @@ func TestSingleValueOptionParser(t *testing.T) {
 			parseFunc: func(s string) (interface{}, error) {
 				return strconv.Atoi(s)
 			},
-			options:  []string{"-p","-l"},
+			options:  []string{"-p", "-l"},
 			option:   "p",
 			expected: (interface{})(nil),
 			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
@@ -111,6 +111,18 @@ func TestSingleValueOptionParser(t *testing.T) {
 			options:  []string{},
 			option:   "p",
 			expected: (interface{})(0),
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.NoError(t, err)
+			},
+		},
+		"should parse value if single value option present": {
+			defaultValue: (interface{})(0),
+			parseFunc: func(s string) (interface{}, error) {
+				return strconv.Atoi(s)
+			},
+			options:  []string{"-p", "9080"},
+			option:   "p",
+			expected: (interface{})(9080),
 			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
 				return assert.NoError(t, err)
 			},
