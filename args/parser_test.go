@@ -20,3 +20,10 @@ func TestBoolOptionParser_WithMoreExtraArguments_ReturnsError(t *testing.T) {
 	assert.Nil(t, value)
 	assert.ErrorIs(t, err, args.ErrTooManyArguments)
 }
+
+func TestBoolOptionParser_NoFlag_ReturnsDefaultValue(t *testing.T) {
+	options, option := []string{"t", "f"}, "l"
+	value, err := args.BoolOptionParser().Parse(options, option)
+	assert.Equal(t, false, value)
+	assert.NoError(t, err)
+}
