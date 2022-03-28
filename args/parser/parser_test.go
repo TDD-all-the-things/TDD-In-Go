@@ -1,10 +1,10 @@
-package args_test
+package parser_test
 
 import (
 	"strconv"
 	"testing"
 
-	"github.com/longyue0521/TDD-In-Go/args"
+	"github.com/longyue0521/TDD-In-Go/args/parser"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,7 +20,7 @@ func TestBoolOptionParser(t *testing.T) {
 			option:   "l",
 			expected: (interface{})(nil),
 			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
-				return assert.ErrorIs(t, err, args.ErrTooManyArguments)
+				return assert.ErrorIs(t, err, parser.ErrTooManyArguments)
 			},
 		},
 		"should not accept more extra arguments for bool option": {
@@ -28,7 +28,7 @@ func TestBoolOptionParser(t *testing.T) {
 			option:   "l",
 			expected: (interface{})(nil),
 			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
-				return assert.ErrorIs(t, err, args.ErrTooManyArguments)
+				return assert.ErrorIs(t, err, parser.ErrTooManyArguments)
 			},
 		},
 		"should get default value if bool option not present": {
@@ -51,7 +51,7 @@ func TestBoolOptionParser(t *testing.T) {
 
 	for name, tt := range testcases {
 		t.Run(name, func(t *testing.T) {
-			actual, err := args.BoolOptionParser().Parse(tt.options, tt.option)
+			actual, err := parser.BoolOptionParser().Parse(tt.options, tt.option)
 			assert.Equal(t, tt.expected, actual)
 			tt.assertion(t, err)
 		})
@@ -76,7 +76,7 @@ func TestSingleValueOptionParser(t *testing.T) {
 			option:   "p",
 			expected: (interface{})(nil),
 			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
-				return assert.ErrorIs(t, err, args.ErrTooManyArguments)
+				return assert.ErrorIs(t, err, parser.ErrTooManyArguments)
 			},
 		},
 		"should not missing argument for single value option": {
@@ -88,7 +88,7 @@ func TestSingleValueOptionParser(t *testing.T) {
 			option:   "p",
 			expected: (interface{})(nil),
 			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
-				return assert.ErrorIs(t, err, args.ErrMissingArgument)
+				return assert.ErrorIs(t, err, parser.ErrMissingArgument)
 			},
 		},
 		"should not missing argument for single value option but with another option": {
@@ -100,7 +100,7 @@ func TestSingleValueOptionParser(t *testing.T) {
 			option:   "p",
 			expected: (interface{})(nil),
 			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
-				return assert.ErrorIs(t, err, args.ErrMissingArgument)
+				return assert.ErrorIs(t, err, parser.ErrMissingArgument)
 			},
 		},
 		"should set default value if single value option present": {
@@ -131,7 +131,7 @@ func TestSingleValueOptionParser(t *testing.T) {
 
 	for name, tt := range testcases {
 		t.Run(name, func(t *testing.T) {
-			actual, err := args.SingleValueOptionParser(tt.defaultValue, tt.parseFunc).Parse(tt.options, tt.option)
+			actual, err := parser.SingleValueOptionParser(tt.defaultValue, tt.parseFunc).Parse(tt.options, tt.option)
 			tt.assertion(t, err)
 			assert.Equal(t, tt.expected, actual)
 		})

@@ -3,6 +3,8 @@ package args
 import (
 	"reflect"
 	"strconv"
+
+	"github.com/longyue0521/TDD-In-Go/args/parser"
 )
 
 func Parse(v interface{}, options ...string) {
@@ -17,13 +19,13 @@ func Parse(v interface{}, options ...string) {
 }
 
 func parseOption(field reflect.StructField, options []string) interface{} {
-	parser := PARSERS[field.Type.String()]
-	value, _ := parser.Parse(options, field.Tag.Get("args"))
+	p := PARSERS[field.Type.String()]
+	value, _ := p.Parse(options, field.Tag.Get("args"))
 	return value
 }
 
-var PARSERS map[string]OptionParser = map[string]OptionParser{
-	"bool":   BoolOptionParser(),
-	"int":    SingleValueOptionParser(0, func(s string) (interface{}, error) { return strconv.Atoi(s) }),
-	"string": SingleValueOptionParser("", func(s string) (interface{}, error) { return s, nil }),
+var PARSERS map[string]parser.OptionParser = map[string]parser.OptionParser{
+	"bool":   parser.BoolOptionParser(),
+	"int":    parser.SingleValueOptionParser(0, func(s string) (interface{}, error) { return strconv.Atoi(s) }),
+	"string": parser.SingleValueOptionParser("", func(s string) (interface{}, error) { return s, nil }),
 }

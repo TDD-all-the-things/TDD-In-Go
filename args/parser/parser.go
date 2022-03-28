@@ -1,4 +1,4 @@
-package args
+package parser
 
 import (
 	"errors"
