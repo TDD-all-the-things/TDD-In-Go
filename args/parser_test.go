@@ -22,6 +22,14 @@ func TestBoolOptionParser(t *testing.T) {
 				return assert.ErrorIs(t, err, args.ErrTooManyArguments)
 			},
 		},
+		"should not accept more extra arguments for bool option": {
+			options:  []string{"-l", "t", "f"},
+			option:   "l",
+			expected: (interface{})(nil),
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.ErrorIs(t, err, args.ErrTooManyArguments)
+			},
+		},
 	}
 
 	for name, tt := range testcases {
@@ -31,13 +39,6 @@ func TestBoolOptionParser(t *testing.T) {
 			tt.assertion(t, err)
 		})
 	}
-}
-
-func TestBoolOptionParser_WithMoreExtraArguments_ReturnsError(t *testing.T) {
-	options, option := []string{"-l", "t", "f"}, "l"
-	value, err := args.BoolOptionParser().Parse(options, option)
-	assert.Nil(t, value)
-	assert.ErrorIs(t, err, args.ErrTooManyArguments)
 }
 
 func TestBoolOptionParser_NoFlag_ReturnsDefaultValue(t *testing.T) {
