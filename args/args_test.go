@@ -40,6 +40,17 @@ func TestParse(t *testing.T) {
 			expected:  &Option{true, 9090, "/usr/vars"},
 			assertion: assert.NoError,
 		},
+		"should return error if tag not present": {
+			flags: []string{"-l", "-p", "9090", "-d", "/usr/vars"},
+			expected: &struct {
+				Logging   bool `args:"l"`
+				Port      int
+				Directory string `args:"d"`
+			}{true, 0, ""},
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.ErrorIs(tt, err, args.ErrMissingTag)
+			},
+		},
 	}
 
 	for name, tt := range testcases {
@@ -65,15 +76,4 @@ type Option struct {
 	Logging   bool   `args:"l"`
 	Port      int    `args:"p"`
 	Directory string `args:"d"`
-}
-
-func TestParse_should_return_error_if_tag_not_present(t *testing.T) {
-	type NoTagOption struct {
-		Logging   bool `args:"l"`
-		Port      int  `args:"p"`
-		Directory string
-	}
-	obj, options := &NoTagOption{}, []string{"-l", "-p", "1234", "-d", "/root/bin"}
-	err := args.Parse(obj, options...)
-	assert.ErrorIs(t, err, args.ErrMissingTag)
 }
