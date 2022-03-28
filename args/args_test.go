@@ -11,28 +11,34 @@ import (
 func TestParse(t *testing.T) {
 
 	testcases := map[string]struct {
-		flags    []string
-		expected interface{}
+		flags     []string
+		expected  interface{}
+		assertion assert.ErrorAssertionFunc
 	}{
 		"no flags": {
-			flags:    []string{},
-			expected: &Option{},
+			flags:     []string{},
+			expected:  &Option{},
+			assertion: assert.NoError,
 		},
 		"-l only": {
-			flags:    []string{"-l"},
-			expected: &Option{true, 0, ""},
+			flags:     []string{"-l"},
+			expected:  &Option{true, 0, ""},
+			assertion: assert.NoError,
 		},
 		"-p only": {
-			flags:    []string{"-p", "8080"},
-			expected: &Option{false, 8080, ""},
+			flags:     []string{"-p", "8080"},
+			expected:  &Option{false, 8080, ""},
+			assertion: assert.NoError,
 		},
 		"-d only": {
-			flags:    []string{"-d", "/usr/logs"},
-			expected: &Option{false, 0, "/usr/logs"},
+			flags:     []string{"-d", "/usr/logs"},
+			expected:  &Option{false, 0, "/usr/logs"},
+			assertion: assert.NoError,
 		},
 		"multiple flags '-l -p 9090 -d /usr/vars'": {
-			flags:    []string{"-l", "-p", "9090", "-d", "/usr/vars"},
-			expected: &Option{true, 9090, "/usr/vars"},
+			flags:     []string{"-l", "-p", "9090", "-d", "/usr/vars"},
+			expected:  &Option{true, 9090, "/usr/vars"},
+			assertion: assert.NoError,
 		},
 	}
 
@@ -44,7 +50,8 @@ func TestParse(t *testing.T) {
 			t.Parallel()
 
 			actual := NewActual(tt.expected)
-			args.Parse(actual, tt.flags...)
+			err := args.Parse(actual, tt.flags...)
+			tt.assertion(t, err)
 			assert.Equal(t, tt.expected, actual)
 		})
 	}
