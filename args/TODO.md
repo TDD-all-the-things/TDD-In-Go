@@ -120,11 +120,11 @@ type ListOption struct {
 
 ### 调整测试
 
-1. BoolOptionParserTest
-   - sad path
+1. ~~BoolOptionParserTest~~
+   - ~~sad path~~
      - `-l t`
      - `-l t f`
-   - default value
+   - ~~default value~~
      - false
 2. SingleValuedOptionParserTest
    - int
