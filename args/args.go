@@ -2,6 +2,7 @@ package args
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"strconv"
 
@@ -29,9 +30,11 @@ func Parse(v interface{}, options ...string) error {
 }
 
 func parseOption(field reflect.StructField, options []string) (interface{}, error) {
-	p := PARSERS[field.Type.String()]
-	value, err := p.Parse(options, field.Tag.Get("args"))
-	return value, err
+	tag := field.Tag.Get("args")
+	if tag == "" {
+		return nil, fmt.Errorf("%w", ErrMissingTag)
+	}
+	return PARSERS[field.Type.String()].Parse(options, tag)
 }
 
 var PARSERS map[string]parser.OptionParser = map[string]parser.OptionParser{
