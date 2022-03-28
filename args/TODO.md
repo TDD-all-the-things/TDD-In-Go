@@ -113,10 +113,10 @@ type ListOption struct {
    - v is CanSet?CanAddr?
    - v's field is unexported?
    - v's field CanSet?
-   - v's field don't have "args" tag
-   - v's field has "args" tag, but it's empty
+   - ~~v's field don't have "args" tag~~
+   - ~~v's field has "args" tag, but it's empty~~ 处理逻辑同缺失
    - func parserOption , if parser not found in PARSERS map?
-   - func Parse in OptionParser, parseValueFunc handle return error
+   - ~~func Parse in OptionParser, parseValueFunc handle return error~~
 
 ### 调整测试
 
