@@ -59,3 +59,14 @@ type Option struct {
 	Port      int    `args:"p"`
 	Directory string `args:"d"`
 }
+
+func TestParse_should_return_error_if_tag_not_present(t *testing.T) {
+	type NoTagOption struct {
+		Logging   bool `args:"l"`
+		Port      int  `args:"p"`
+		Directory string
+	}
+	obj, options := &NoTagOption{}, []string{"-l", "-p", "1234", "-d", "/root/bin"}
+	err := args.Parse(obj, options...)
+	assert.ErrorIs(t, err, args.ErrMissingTag)
+}
