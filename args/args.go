@@ -34,10 +34,10 @@ func parseOption(field reflect.StructField, options []string) (interface{}, erro
 	if tag == "" {
 		return nil, fmt.Errorf("%w", ErrMissingTag)
 	}
-	return PARSERS[field.Type.String()].Parse(options, tag)
+	return parsers[field.Type.String()].Parse(options, tag)
 }
 
-var PARSERS map[string]parser.OptionParser = map[string]parser.OptionParser{
+var parsers map[string]parser.OptionParser = map[string]parser.OptionParser{
 	"bool":   parser.BoolOptionParser(),
 	"int":    parser.SingleValueOptionParser(0, func(s string) (interface{}, error) { return strconv.Atoi(s) }),
 	"string": parser.SingleValueOptionParser("", func(s string) (interface{}, error) { return s, nil }),
