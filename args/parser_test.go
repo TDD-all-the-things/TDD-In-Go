@@ -50,16 +50,37 @@ func TestBoolOptionParser(t *testing.T) {
 	}
 }
 
-func TestSingleValueOptionParser_should_not_accept_extra_argument_for_single_value_option(t *testing.T) {
-	defaultValue := 0
-	parseFunc := func(s string) (interface{}, error) {
-		return strconv.Atoi(s)
+func TestSingleValueOptionParser(t *testing.T) {
+	testcases := map[string]struct {
+		defaultValue interface{}
+		parseFunc    func(s string) (interface{}, error)
+		options      []string
+		option       string
+		expected     interface{}
+		assertion    assert.ErrorAssertionFunc
+	}{
+		"should not accept extra argument for single value option": {
+			defaultValue: (interface{})(0),
+			parseFunc: func(s string) (interface{}, error) {
+				return strconv.Atoi(s)
+			},
+			options:  []string{"-p", "8080", "8081"},
+			option:   "p",
+			expected: (interface{})(nil),
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.ErrorIs(t, err, args.ErrTooManyArguments)
+			},
+		},
 	}
-	options := []string{"-p", "8080", "8081"}
-	option := "p"
-	value, err := args.SingleValueOptionParser(defaultValue, parseFunc).Parse(options, option)
-	assert.Nil(t, value)
-	assert.ErrorIs(t, err, args.ErrTooManyArguments)
+
+	for name, tt := range testcases {
+		t.Run(name, func(t *testing.T) {
+			actual, err := args.SingleValueOptionParser(tt.defaultValue, tt.parseFunc).Parse(tt.options, tt.option)
+			tt.assertion(t, err)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
+
 }
 
 func TestSingleValueOptionParser_should_not_missing_argument_for_single_value_option(t *testing.T) {
