@@ -126,16 +126,16 @@ type ListOption struct {
      - `-l t f`
    - ~~default value~~
      - false
-2. SingleValuedOptionParserTest
-   - int
-     - sad path
+2. ~~SingleValuedOptionParserTest~~
+   - ~~int~~
+     - ~~sad path~~
        - int `-p` 
        - int `-p 8080 8081`
-     - default value
+     - ~~default value~~
        - 0
-   - string
-     - sad path
+   - ~~string~~
+     - ~~sad path~~
        - string, `-d`
        - string, `-d /usr/logs /usr/vars`
-     - default value
+     - ~~default value~~
        - ""
