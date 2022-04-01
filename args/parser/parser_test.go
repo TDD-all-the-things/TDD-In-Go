@@ -184,6 +184,17 @@ func TestListOptionParser_StringListOption(t *testing.T) {
 			expected:  (interface{})([]string{"number", "-1", "-l2"}),
 			assertion: assert.NoError,
 		},
+		"should handle parse list values error if string list option present": {
+			options: []string{"-g", "a", "b"},
+			option:  "g",
+			parseValues: func(s ...string) ([]string, error) {
+				return nil, parser.ErrTooManyArguments
+			},
+			expected: (interface{})(nil),
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.ErrorIs(t, err, parser.ErrIllegalListValues)
+			},
+		},
 	}
 	for name, tt := range testcases {
 		t.Run(name, func(t *testing.T) {
