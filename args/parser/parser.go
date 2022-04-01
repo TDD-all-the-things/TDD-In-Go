@@ -30,13 +30,12 @@ type unaryOptionParser[T unary] struct {
 }
 
 func (p *unaryOptionParser[T]) Parse(options []string, option string) (interface{}, error) {
-	i := indexOf(options, "-"+option)
-	if i < 0 {
-		return p.defaultValue, nil
-	}
-	vals, err := p.values(i+1, options)
+	vals, err := p.values(options, option)
 	if err != nil {
 		return nil, err
+	}
+	if vals == nil {
+		return p.defaultValue, nil
 	}
 	val, err := p.parse(vals...)
 	if err != nil {
@@ -45,8 +44,12 @@ func (p *unaryOptionParser[T]) Parse(options []string, option string) (interface
 	return val, nil
 }
 
-func (p *unaryOptionParser[T]) values(start int, options []string) ([]string, error) {
-	values := valuesOfOptionFrom(start, indexOfFirstOptionFrom(start, options), options)
+func (p *unaryOptionParser[T]) values(options []string, option string) ([]string, error) {
+	i := indexOf(options, "-"+option)
+	if i < 0 {
+		return nil, nil
+	}
+	values := valuesOfOptionFrom(i+1, indexOfFirstOptionFrom(i+1, options), options)
 	if len(values) < p.numOfExpectedValues {
 		return nil, fmt.Errorf("%w", ErrMissingArgument)
 	}
@@ -103,13 +106,12 @@ type listOptionParser[T list] struct {
 }
 
 func (p *listOptionParser[T]) Parse(options []string, option string) (interface{}, error) {
-	i := indexOf(options, "-"+option)
-	if i < 0 {
-		return p.defaultValue, nil
-	}
-	vals, err := p.values(i+1, options)
+	vals, err := p.values(options, option)
 	if err != nil {
 		return nil, err
+	}
+	if vals == nil {
+		return p.defaultValue, nil
 	}
 	val, err := p.parse(vals...)
 	if err != nil {
@@ -118,8 +120,12 @@ func (p *listOptionParser[T]) Parse(options []string, option string) (interface{
 	return val, nil
 }
 
-func (p *listOptionParser[T]) values(start int, options []string) ([]string, error) {
-	vals := valuesOfOptionFrom(start, indexOfFirstOptionFrom(start, options), options)
+func (p *listOptionParser[T]) values(options []string, option string) ([]string, error) {
+	i := indexOf(options, "-"+option)
+	if i < 0 {
+		return nil, nil
+	}
+	vals := valuesOfOptionFrom(i+1, indexOfFirstOptionFrom(i+1, options), options)
 	if len(vals) < 1 {
 		return nil, fmt.Errorf("%w", ErrAtLeastOneArgument)
 	}
