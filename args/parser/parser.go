@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 var (
@@ -12,6 +13,7 @@ var (
 	ErrMissingArgument    = errors.New("missing argument")
 	ErrAtLeastOneArgument = errors.New("at least one argument")
 	ErrIllegalValue       = errors.New("illegal value")
+	ErrIllegalListValues  = errors.New("illegal list values")
 )
 
 type OptionParser interface {
@@ -91,7 +93,10 @@ func (p *listOptionParser[T]) Parse(options []string, option string) (interface{
 	if len(vals) < 1 {
 		return nil, fmt.Errorf("%w", ErrAtLeastOneArgument)
 	}
-	val, _ := p.parseValues(vals...)
+	val, err := p.parseValues(vals...)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %s", ErrIllegalListValues, strings.Join(vals, ","))
+	}
 	return val, nil
 }
 
