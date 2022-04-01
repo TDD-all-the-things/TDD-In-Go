@@ -157,6 +157,14 @@ func TestListOptionParser_StringListOption(t *testing.T) {
 				return assert.NoError(t, err)
 			},
 		},
+		"should have at least one argument for string list option present": {
+			options:  []string{"-g"},
+			option:   "g",
+			expected: (interface{})(nil),
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.ErrorIs(t, err, parser.ErrAtLeastOneArgument)
+			},
+		},
 	}
 	for name, tt := range testcases {
 		t.Run(name, func(t *testing.T) {
