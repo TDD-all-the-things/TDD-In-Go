@@ -3,8 +3,8 @@ package parser
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"strconv"
-	"strings"
 )
 
 var (
@@ -133,7 +133,8 @@ func indexOfFirstOptionFrom(start int, options []string) int {
 }
 
 func isOption(option string) bool {
-	return strings.HasPrefix(option, "-")
+	ok, _ := regexp.MatchString(`^-[a-zA-Z-]+$`, option)
+	return ok
 }
 
 func indexOf(options []string, option string) int {
