@@ -64,7 +64,7 @@ func TestIntOptionParser(t *testing.T) {
 		expected  interface{}
 		assertion assert.ErrorAssertionFunc
 	}{
-		"should not accept extra argument for single value option": {
+		"should not accept extra argument for int option": {
 			options:  []string{"-p", "8080", "8081"},
 			option:   "p",
 			expected: (interface{})(nil),
@@ -72,7 +72,7 @@ func TestIntOptionParser(t *testing.T) {
 				return assert.ErrorIs(t, err, parser.ErrTooManyArguments)
 			},
 		},
-		"should not missing argument for single value option": {
+		"should not missing argument for int option": {
 			options:  []string{"-p"},
 			option:   "p",
 			expected: (interface{})(nil),
@@ -80,7 +80,7 @@ func TestIntOptionParser(t *testing.T) {
 				return assert.ErrorIs(t, err, parser.ErrMissingArgument)
 			},
 		},
-		"should not missing argument for single value option but with another option": {
+		"should not missing argument for int option but with another option": {
 			options:  []string{"-p", "-l"},
 			option:   "p",
 			expected: (interface{})(nil),
@@ -88,7 +88,7 @@ func TestIntOptionParser(t *testing.T) {
 				return assert.ErrorIs(t, err, parser.ErrMissingArgument)
 			},
 		},
-		"should set default value if single value option present": {
+		"should set default value if int option not present": {
 			options:  []string{},
 			option:   "p",
 			expected: (interface{})(0),
@@ -96,7 +96,7 @@ func TestIntOptionParser(t *testing.T) {
 				return assert.NoError(t, err)
 			},
 		},
-		"should parse value if single value option present": {
+		"should parse value if int option present": {
 			options:  []string{"-p", "9080"},
 			option:   "p",
 			expected: (interface{})(9080),
