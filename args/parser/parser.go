@@ -15,27 +15,36 @@ type OptionParser interface {
 	Parse(options []string, option string) (interface{}, error)
 }
 
-type boolOptionParser struct{}
-
-func BoolOptionParser() OptionParser {
-	return &boolOptionParser{}
+type OptionType interface {
+	bool | int | string
+}
+type unaryOptionParser[T OptionType] struct {
+	defaultValue         T
+	numOfFollowingValues int
+	parseVauleFunc       func(s ...string) (T, error)
 }
 
-func (p *boolOptionParser) Parse(options []string, option string) (interface{}, error) {
+func (p *unaryOptionParser[T]) Parse(options []string, option string) (interface{}, error) {
 	i := indexOf(options, "-"+option)
 	if i < 0 {
-		return false, nil
+		return p.defaultValue, nil
 	}
-	n := 0
+	n := p.numOfFollowingValues
 	vals, err := valuesOf(i+1, n, options)
 	if err != nil {
 		return nil, err
 	}
-	return p.parseValue(vals), nil
+	return p.parseVauleFunc(vals...)
 }
 
-func (p *boolOptionParser) parseValue(vals []string) interface{} {
-	return true
+func BoolOptionParser() OptionParser {
+	return &unaryOptionParser[bool]{
+		defaultValue:         false,
+		numOfFollowingValues: 0,
+		parseVauleFunc: func(s ...string) (bool, error) {
+			return true, nil
+		},
+	}
 }
 
 type singleValueOptionParser struct {
