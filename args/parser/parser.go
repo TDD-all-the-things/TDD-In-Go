@@ -17,13 +17,13 @@ type OptionParser interface {
 	Parse(options []string, option string) (interface{}, error)
 }
 
-type OptionType interface {
+type unary interface {
 	bool | int | string
 }
-type unaryOptionParser[T OptionType] struct {
-	defaultValue         T
-	numOfFollowingValues int
-	parseVauleFunc       func(s ...string) (T, error)
+type unaryOptionParser[T unary] struct {
+	defaultValue        T
+	numOfExpectedValues int
+	parseValue          func(s ...string) (T, error)
 }
 
 func (p *unaryOptionParser[T]) Parse(options []string, option string) (interface{}, error) {
@@ -31,11 +31,11 @@ func (p *unaryOptionParser[T]) Parse(options []string, option string) (interface
 	if i < 0 {
 		return p.defaultValue, nil
 	}
-	vals, err := valuesOf(i+1, p.numOfFollowingValues, options)
+	vals, err := valuesOf(i+1, p.numOfExpectedValues, options)
 	if err != nil {
 		return nil, err
 	}
-	val, err := p.parseVauleFunc(vals...)
+	val, err := p.parseValue(vals...)
 	if err != nil {
 		return nil, fmt.Errorf("%w", ErrIllegalValue)
 	}
@@ -44,9 +44,9 @@ func (p *unaryOptionParser[T]) Parse(options []string, option string) (interface
 
 func BoolOptionParser() OptionParser {
 	return &unaryOptionParser[bool]{
-		defaultValue:         false,
-		numOfFollowingValues: 0,
-		parseVauleFunc: func(s ...string) (bool, error) {
+		defaultValue:        false,
+		numOfExpectedValues: 0,
+		parseValue: func(s ...string) (bool, error) {
 			return true, nil
 		},
 	}
@@ -54,9 +54,9 @@ func BoolOptionParser() OptionParser {
 
 func IntOptionParser() OptionParser {
 	return &unaryOptionParser[int]{
-		defaultValue:         0,
-		numOfFollowingValues: 1,
-		parseVauleFunc: func(s ...string) (int, error) {
+		defaultValue:        0,
+		numOfExpectedValues: 1,
+		parseValue: func(s ...string) (int, error) {
 			return strconv.Atoi(s[0])
 		},
 	}
@@ -64,9 +64,9 @@ func IntOptionParser() OptionParser {
 
 func StringOptionParser() OptionParser {
 	return &unaryOptionParser[string]{
-		defaultValue:         "",
-		numOfFollowingValues: 1,
-		parseVauleFunc: func(s ...string) (string, error) {
+		defaultValue:        "",
+		numOfExpectedValues: 1,
+		parseValue: func(s ...string) (string, error) {
 			return s[0], nil
 		},
 	}
