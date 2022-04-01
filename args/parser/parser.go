@@ -111,9 +111,9 @@ func (p *listOptionParser[T]) Parse(options []string, option string) (interface{
 	if err != nil {
 		return nil, err
 	}
-	val, err := p.parseValue(vals...)
+	val, err := p.parse(vals...)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %s", ErrIllegalListValues, strings.Join(vals, ","))
+		return nil, err
 	}
 	return val, nil
 }
@@ -124,6 +124,14 @@ func (p *listOptionParser[T]) values(start int, options []string) ([]string, err
 		return nil, fmt.Errorf("%w", ErrAtLeastOneArgument)
 	}
 	return vals, nil
+}
+
+func (p *listOptionParser[T]) parse(vals ...string) (interface{}, error) {
+	val, err := p.parseValue(vals...)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %s", ErrIllegalListValues, strings.Join(vals, ","))
+	}
+	return val, nil
 }
 
 func StringListParser(parseValues ...ParseValueFunc[[]string]) OptionParser {
