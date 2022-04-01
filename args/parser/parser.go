@@ -34,7 +34,7 @@ func (p *unaryOptionParser[T]) Parse(options []string, option string) (interface
 	if i < 0 {
 		return p.defaultValue, nil
 	}
-	vals, err := p.valuesOf(i+1, options)
+	vals, err := p.values(i+1, options)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (p *unaryOptionParser[T]) Parse(options []string, option string) (interface
 	return val, nil
 }
 
-func (p *unaryOptionParser[T]) valuesOf(start int, options []string) ([]string, error) {
+func (p *unaryOptionParser[T]) values(start int, options []string) ([]string, error) {
 	values := valuesOfOptionFrom(start, indexOfFirstOptionFrom(start, options), options)
 	if len(values) < p.numOfExpectedValues {
 		return nil, fmt.Errorf("%w", ErrMissingArgument)
@@ -90,21 +90,21 @@ type list interface {
 	[]string
 }
 type listOptionParser[T list] struct {
-	defaultValues T
-	parseValues   func(s ...string) (T, error)
+	defaultValue T
+	parseValue   func(s ...string) (T, error)
 }
 
 func (p *listOptionParser[T]) Parse(options []string, option string) (interface{}, error) {
 	i := indexOf(options, "-"+option)
 	if i < 0 {
-		return p.defaultValues, nil
+		return p.defaultValue, nil
 	}
 	start := i + 1
 	vals := valuesOfOptionFrom(start, indexOfFirstOptionFrom(start, options), options)
 	if len(vals) < 1 {
 		return nil, fmt.Errorf("%w", ErrAtLeastOneArgument)
 	}
-	val, err := p.parseValues(vals...)
+	val, err := p.parseValue(vals...)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %s", ErrIllegalListValues, strings.Join(vals, ","))
 	}
@@ -113,13 +113,13 @@ func (p *listOptionParser[T]) Parse(options []string, option string) (interface{
 
 func StringListParser(parseValues ...ParseValueFunc[[]string]) OptionParser {
 	parser := &listOptionParser[[]string]{
-		defaultValues: []string{},
-		parseValues: func(s ...string) ([]string, error) {
+		defaultValue: []string{},
+		parseValue: func(s ...string) ([]string, error) {
 			return s, nil
 		},
 	}
 	if len(parseValues) != 0 {
-		parser.parseValues = parseValues[0]
+		parser.parseValue = parseValues[0]
 	}
 	return parser
 }
