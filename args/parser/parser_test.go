@@ -133,18 +133,41 @@ func TestUnaryOptionParser_IntOption(t *testing.T) {
 	}
 }
 
-func TestListOptionParser_StringListOption_should_parse_value_if_string_list_option_present(t *testing.T) {
-	options := []string{"-g", "this", "is", "list"}
-	option := "g"
-	actual, err := parser.StringListParser().Parse(options, option)
-	assert.NoError(t, err)
-	assert.Equal(t, []string{"this", "is", "list"}, actual)
-}
+func TestListOptionParser_StringListOption(t *testing.T) {
+	testcases := map[string]struct {
+		options   []string
+		option    string
+		expected  interface{}
+		assertion assert.ErrorAssertionFunc
+	}{
 
-func TestListOptionParser_StringListOption_should_set_default_value_if_string_list_option_not_present(t *testing.T) {
-	options := []string{"this", "is", "list"}
-	option := "g"
-	actual, err := parser.StringListParser().Parse(options, option)
-	assert.NoError(t, err)
-	assert.Equal(t, []string{}, actual)
+		"should set default list value if string list option not present": {
+			options:  []string{"this", "is", "list"},
+			option:   "g",
+			expected: (interface{})([]string{}),
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.NoError(t, err)
+			},
+		},
+		"should parse list value if string list option present": {
+			options:  []string{"-g", "this", "is", "list"},
+			option:   "g",
+			expected: (interface{})([]string{"this", "is", "list"}),
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.NoError(t, err)
+			},
+		},
+	}
+	for name, tt := range testcases {
+		t.Run(name, func(t *testing.T) {
+			// 注意:并发问题
+			tt := tt
+			// 利用多核,并行运行
+			t.Parallel()
+
+			actual, err := parser.StringListParser().Parse(tt.options, tt.option)
+			tt.assertion(t, err)
+			assert.Equal(t, tt.expected, actual)
+		})
+	}
 }
