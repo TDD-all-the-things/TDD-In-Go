@@ -72,8 +72,29 @@ func StringOptionParser() OptionParser {
 	}
 }
 
+type list interface {
+	[]string
+}
+type listOptionParser[T list] struct {
+	defaultValues T
+	parseValues   func(s ...string) (T, error)
+}
+
+func (p *listOptionParser[T]) Parse(options []string, option string) (interface{}, error) {
+	i := indexOf(options, "-"+option)
+	start := i + 1
+	vals := valuesOfOptionFrom(start, indexOfFirstOptionFrom(start, options), options)
+	val, _ := p.parseValues(vals...)
+	return val, nil
+}
+
 func StringListParser() OptionParser {
-	return nil
+	return &listOptionParser[[]string]{
+		defaultValues: []string{},
+		parseValues: func(s ...string) ([]string, error) {
+			return s, nil
+		},
+	}
 }
 
 func valuesOf(start int, expectedLen int, options []string) ([]string, error) {
