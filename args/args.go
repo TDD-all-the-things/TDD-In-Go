@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
-	"strconv"
 
 	"github.com/longyue0521/TDD-In-Go/args/parser"
 )
@@ -39,6 +38,6 @@ func parseOption(field reflect.StructField, options []string) (interface{}, erro
 
 var parsers map[string]parser.OptionParser = map[string]parser.OptionParser{
 	"bool":   parser.BoolOptionParser(),
-	"int":    parser.SingleValueOptionParser(0, func(s string) (interface{}, error) { return strconv.Atoi(s) }),
-	"string": parser.SingleValueOptionParser("", func(s string) (interface{}, error) { return s, nil }),
+	"int":    parser.IntOptionParser(),
+	"string": parser.StringOptionParser(),
 }

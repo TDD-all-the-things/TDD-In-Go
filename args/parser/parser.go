@@ -3,7 +3,6 @@ package parser
 import (
 	"errors"
 	"fmt"
-	"reflect"
 	"strconv"
 	"strings"
 )
@@ -67,18 +66,6 @@ func StringOptionParser() OptionParser {
 			return s[0], nil
 		},
 	}
-}
-
-type singleValueOptionParser struct {
-	defaultValue   interface{}
-	parseValueFunc func(s string) (interface{}, error)
-}
-
-func SingleValueOptionParser(defaultValue interface{}, parseValueFunc func(s string) (interface{}, error)) OptionParser {
-	if reflect.TypeOf(defaultValue).String() == "int" {
-		return IntOptionParser()
-	}
-	return StringOptionParser()
 }
 
 func valuesOf(start int, expectedLen int, options []string) ([]string, error) {
