@@ -8,9 +8,10 @@ import (
 )
 
 var (
-	ErrTooManyArguments = errors.New("too many arguments")
-	ErrMissingArgument  = errors.New("missing argument")
-	ErrIllegalValue     = errors.New("illegal value")
+	ErrTooManyArguments   = errors.New("too many arguments")
+	ErrMissingArgument    = errors.New("missing argument")
+	ErrAtLeastOneArgument = errors.New("at least one argument")
+	ErrIllegalValue       = errors.New("illegal value")
 )
 
 type OptionParser interface {
@@ -87,6 +88,9 @@ func (p *listOptionParser[T]) Parse(options []string, option string) (interface{
 	}
 	start := i + 1
 	vals := valuesOfOptionFrom(start, indexOfFirstOptionFrom(start, options), options)
+	if len(vals) < 1 {
+		return nil, fmt.Errorf("%w", ErrAtLeastOneArgument)
+	}
 	val, _ := p.parseValues(vals...)
 	return val, nil
 }
