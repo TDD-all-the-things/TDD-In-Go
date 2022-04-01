@@ -38,9 +38,9 @@ func (p *unaryOptionParser[T]) Parse(options []string, option string) (interface
 	if err != nil {
 		return nil, err
 	}
-	val, err := p.parseValue(vals...)
+	val, err := p.parse(vals...)
 	if err != nil {
-		return nil, fmt.Errorf("%w", ErrIllegalValue)
+		return nil, err
 	}
 	return val, nil
 }
@@ -54,6 +54,14 @@ func (p *unaryOptionParser[T]) values(start int, options []string) ([]string, er
 		return nil, fmt.Errorf("%w", ErrTooManyArguments)
 	}
 	return values, nil
+}
+
+func (p *unaryOptionParser[T]) parse(vals ...string) (interface{}, error) {
+	val, err := p.parseValue(vals...)
+	if err != nil {
+		return nil, fmt.Errorf("%w", ErrIllegalValue)
+	}
+	return val, nil
 }
 
 func BoolOptionParser() OptionParser {
