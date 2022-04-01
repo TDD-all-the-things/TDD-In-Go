@@ -132,3 +132,11 @@ func TestUnaryOptionParser_IntOption(t *testing.T) {
 		})
 	}
 }
+
+func TestListOptionParser_StringListOption_should_parse_value_if_string_list_option_present(t *testing.T) {
+	options := []string{"-g", "this", "is", "list"}
+	option := "g"
+	actual, err := parser.StringListParser().Parse(options, option)
+	assert.NoError(t, err)
+	assert.Equal(t, []string{"this", "is", "list"}, actual)
+}
