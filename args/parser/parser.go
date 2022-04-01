@@ -10,6 +10,7 @@ import (
 var (
 	ErrTooManyArguments = errors.New("too many arguments")
 	ErrMissingArgument  = errors.New("missing argument")
+	ErrIllegalValue     = errors.New("illegal value")
 )
 
 type OptionParser interface {
@@ -34,7 +35,11 @@ func (p *unaryOptionParser[T]) Parse(options []string, option string) (interface
 	if err != nil {
 		return nil, err
 	}
-	return p.parseVauleFunc(vals...)
+	val, err := p.parseVauleFunc(vals...)
+	if err != nil {
+		return nil, fmt.Errorf("%w", ErrIllegalValue)
+	}
+	return val, nil
 }
 
 func BoolOptionParser() OptionParser {
