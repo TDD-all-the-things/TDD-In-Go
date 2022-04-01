@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestBoolOptionParser(t *testing.T) {
+func TestTestUnaryOptionParser_BoolOption(t *testing.T) {
 	testcases := map[string]struct {
 		options   []string
 		option    string
@@ -62,7 +62,7 @@ func TestBoolOptionParser(t *testing.T) {
 	}
 }
 
-func TestIntOptionParser(t *testing.T) {
+func TestUnaryOptionParser_IntOption(t *testing.T) {
 	testcases := map[string]struct {
 		options   []string
 		option    string
