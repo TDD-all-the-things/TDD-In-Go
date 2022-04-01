@@ -165,6 +165,12 @@ func TestListOptionParser_StringListOption(t *testing.T) {
 				return assert.ErrorIs(t, err, parser.ErrAtLeastOneArgument)
 			},
 		},
+		"should parse special list value if string list option present": {
+			options:   []string{"-g", "number", "-1", "-l2", "--list"},
+			option:    "g",
+			expected:  (interface{})([]string{"number", "-1", "-l2"}),
+			assertion: assert.NoError,
+		},
 	}
 	for name, tt := range testcases {
 		t.Run(name, func(t *testing.T) {
