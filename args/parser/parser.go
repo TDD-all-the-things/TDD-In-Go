@@ -82,6 +82,9 @@ type listOptionParser[T list] struct {
 
 func (p *listOptionParser[T]) Parse(options []string, option string) (interface{}, error) {
 	i := indexOf(options, "-"+option)
+	if i < 0 {
+		return p.defaultValues, nil
+	}
 	start := i + 1
 	vals := valuesOfOptionFrom(start, indexOfFirstOptionFrom(start, options), options)
 	val, _ := p.parseValues(vals...)
