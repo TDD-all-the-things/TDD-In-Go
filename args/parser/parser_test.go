@@ -109,6 +109,14 @@ func TestIntOptionParser(t *testing.T) {
 				return assert.NoError(t, err)
 			},
 		},
+		"should not parse illegal value if int option present": {
+			options:  []string{"-p", "9x8y"},
+			option:   "p",
+			expected: (interface{})(nil),
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.ErrorIs(t, err, parser.ErrIllegalValue)
+			},
+		},
 	}
 
 	for name, tt := range testcases {
