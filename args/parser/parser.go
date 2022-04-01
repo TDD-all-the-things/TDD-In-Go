@@ -27,11 +27,15 @@ func (p *boolOptionParser) Parse(options []string, option string) (interface{}, 
 		return false, nil
 	}
 	n := 0
-	_, err := valuesOf(i+1, n, options)
+	vals, err := valuesOf(i+1, n, options)
 	if err != nil {
 		return nil, err
 	}
-	return true, nil
+	return p.parseValue(vals), nil
+}
+
+func (p *boolOptionParser) parseValue(vals []string) interface{} {
+	return true
 }
 
 type singleValueOptionParser struct {
@@ -56,8 +60,12 @@ func (p *singleValueOptionParser) Parse(options []string, option string) (interf
 	if err != nil {
 		return nil, err
 	}
+	return p.parseValue(vals), nil
+}
+
+func (p *singleValueOptionParser) parseValue(vals []string) interface{} {
 	val, _ := p.parseValueFunc(vals[0])
-	return val, nil
+	return val
 }
 
 func valuesOf(start int, expectedLen int, options []string) ([]string, error) {
