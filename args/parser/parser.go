@@ -26,13 +26,10 @@ func (p *boolOptionParser) Parse(options []string, option string) (interface{}, 
 	if i < 0 {
 		return false, nil
 	}
-	start, end := i+1, indexOfFirstOptionFrom(i+1, options)
-	values := valuesOfOptionFrom(start, end, options)
-	if len(values) < 0 {
-		return nil, fmt.Errorf("%w", ErrMissingArgument)
-	}
-	if len(values) > 0 {
-		return nil, fmt.Errorf("%w", ErrTooManyArguments)
+	n := 0
+	_, err := valuesOf(i+1, n, options)
+	if err != nil {
+		return nil, err
 	}
 	return true, nil
 }
