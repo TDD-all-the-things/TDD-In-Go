@@ -30,8 +30,7 @@ func (p *unaryOptionParser[T]) Parse(options []string, option string) (interface
 	if i < 0 {
 		return p.defaultValue, nil
 	}
-	n := p.numOfFollowingValues
-	vals, err := valuesOf(i+1, n, options)
+	vals, err := valuesOf(i+1, p.numOfFollowingValues, options)
 	if err != nil {
 		return nil, err
 	}
@@ -89,11 +88,15 @@ func valuesOfOptionFrom(start int, end int, options []string) []string {
 
 func indexOfFirstOptionFrom(start int, options []string) int {
 	for i := start; i < len(options); i++ {
-		if strings.HasPrefix(options[i], "-") {
+		if isOption(options[i]) {
 			return i
 		}
 	}
 	return len(options)
+}
+
+func isOption(option string) bool {
+	return strings.HasPrefix(option, "-")
 }
 
 func indexOf(options []string, option string) int {
