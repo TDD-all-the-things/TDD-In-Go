@@ -54,16 +54,24 @@ func (p *singleValueOptionParser) Parse(options []string, option string) (interf
 	if i < 0 {
 		return p.defaultValue, nil
 	}
-	start, end := i+1, indexOfFirstOptionFrom(i+1, options)
-	values := valuesOfOptionFrom(start, end, options)
-	if len(values) < 1 {
+	n := 1
+	vals, err := valuesOf(i+1, n, options)
+	if err != nil {
+		return nil, err
+	}
+	val, _ := p.parseValueFunc(vals[0])
+	return val, nil
+}
+
+func valuesOf(start int, expectedLen int, options []string) ([]string, error) {
+	values := valuesOfOptionFrom(start, indexOfFirstOptionFrom(start, options), options)
+	if len(values) < expectedLen {
 		return nil, fmt.Errorf("%w", ErrMissingArgument)
 	}
-	if len(values) > 1 {
+	if len(values) > expectedLen {
 		return nil, fmt.Errorf("%w", ErrTooManyArguments)
 	}
-	val, _ := p.parseValueFunc(options[i+1])
-	return val, nil
+	return values, nil
 }
 
 func valuesOfOptionFrom(start int, end int, options []string) []string {
