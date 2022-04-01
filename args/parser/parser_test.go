@@ -135,39 +135,52 @@ func TestUnaryOptionParser_IntOption(t *testing.T) {
 
 func TestListOptionParser_StringListOption(t *testing.T) {
 	testcases := map[string]struct {
-		options   []string
-		option    string
-		expected  interface{}
-		assertion assert.ErrorAssertionFunc
+		options     []string
+		option      string
+		parseValues func(s ...string) ([]string, error)
+		expected    interface{}
+		assertion   assert.ErrorAssertionFunc
 	}{
 
 		"should set default list value if string list option not present": {
-			options:  []string{"this", "is", "list"},
-			option:   "g",
+			options: []string{"this", "is", "list"},
+			option:  "g",
+			parseValues: func(s ...string) ([]string, error) {
+				return s, nil
+			},
 			expected: (interface{})([]string{}),
 			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
 				return assert.NoError(t, err)
 			},
 		},
 		"should parse list value if string list option present": {
-			options:  []string{"-g", "this", "is", "list"},
-			option:   "g",
+			options: []string{"-g", "this", "is", "list"},
+			option:  "g",
+			parseValues: func(s ...string) ([]string, error) {
+				return s, nil
+			},
 			expected: (interface{})([]string{"this", "is", "list"}),
 			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
 				return assert.NoError(t, err)
 			},
 		},
 		"should have at least one argument for string list option present": {
-			options:  []string{"-g"},
-			option:   "g",
+			options: []string{"-g"},
+			option:  "g",
+			parseValues: func(s ...string) ([]string, error) {
+				return s, nil
+			},
 			expected: (interface{})(nil),
 			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
 				return assert.ErrorIs(t, err, parser.ErrAtLeastOneArgument)
 			},
 		},
 		"should parse special list value if string list option present": {
-			options:   []string{"-g", "number", "-1", "-l2", "--list"},
-			option:    "g",
+			options: []string{"-g", "number", "-1", "-l2", "--list"},
+			option:  "g",
+			parseValues: func(s ...string) ([]string, error) {
+				return s, nil
+			},
 			expected:  (interface{})([]string{"number", "-1", "-l2"}),
 			assertion: assert.NoError,
 		},
@@ -179,7 +192,7 @@ func TestListOptionParser_StringListOption(t *testing.T) {
 			// 利用多核,并行运行
 			t.Parallel()
 
-			actual, err := parser.StringListParser().Parse(tt.options, tt.option)
+			actual, err := parser.StringListParser(tt.parseValues).Parse(tt.options, tt.option)
 			tt.assertion(t, err)
 			assert.Equal(t, tt.expected, actual)
 		})
