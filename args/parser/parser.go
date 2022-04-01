@@ -59,6 +59,23 @@ func (p *singleValueOptionParser) Parse(options []string, option string) (interf
 	return val, nil
 }
 
+func valuesOfOptionFrom(start int, end int, options []string) []string {
+	values := []string{}
+	for i := start; i < end; i++ {
+		values = append(values, options[i])
+	}
+	return values
+}
+
+func indexOfFirstOptionFrom(start int, options []string) int {
+	for i := start; i < len(options); i++ {
+		if strings.HasPrefix(options[i], "-") {
+			return i
+		}
+	}
+	return len(options)
+}
+
 func indexOf(options []string, option string) int {
 	for i, opt := range options {
 		if opt == option {
