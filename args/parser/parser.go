@@ -34,7 +34,7 @@ func (p *unaryOptionParser[T]) Parse(options []string, option string) (interface
 	if i < 0 {
 		return p.defaultValue, nil
 	}
-	vals, err := valuesOf(i+1, p.numOfExpectedValues, options)
+	vals, err := p.valuesOf(i+1, options)
 	if err != nil {
 		return nil, err
 	}
@@ -43,6 +43,17 @@ func (p *unaryOptionParser[T]) Parse(options []string, option string) (interface
 		return nil, fmt.Errorf("%w", ErrIllegalValue)
 	}
 	return val, nil
+}
+
+func (p *unaryOptionParser[T]) valuesOf(start int, options []string) ([]string, error) {
+	values := valuesOfOptionFrom(start, indexOfFirstOptionFrom(start, options), options)
+	if len(values) < p.numOfExpectedValues {
+		return nil, fmt.Errorf("%w", ErrMissingArgument)
+	}
+	if len(values) > p.numOfExpectedValues {
+		return nil, fmt.Errorf("%w", ErrTooManyArguments)
+	}
+	return values, nil
 }
 
 func BoolOptionParser() OptionParser {
@@ -114,17 +125,6 @@ func StringListParser(parseValues ...ParseValueFunc[[]string]) OptionParser {
 }
 
 type ParseValueFunc[T any] func(s ...string) (T, error)
-
-func valuesOf(start int, expectedLen int, options []string) ([]string, error) {
-	values := valuesOfOptionFrom(start, indexOfFirstOptionFrom(start, options), options)
-	if len(values) < expectedLen {
-		return nil, fmt.Errorf("%w", ErrMissingArgument)
-	}
-	if len(values) > expectedLen {
-		return nil, fmt.Errorf("%w", ErrTooManyArguments)
-	}
-	return values, nil
-}
 
 func valuesOfOptionFrom(start int, end int, options []string) []string {
 	values := []string{}
