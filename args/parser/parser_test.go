@@ -50,6 +50,11 @@ func TestBoolOptionParser(t *testing.T) {
 
 	for name, tt := range testcases {
 		t.Run(name, func(t *testing.T) {
+			// 注意:并发问题
+			tt := tt
+			// 利用多核,并行运行
+			t.Parallel()
+
 			actual, err := parser.BoolOptionParser().Parse(tt.options, tt.option)
 			assert.Equal(t, tt.expected, actual)
 			tt.assertion(t, err)
@@ -108,6 +113,11 @@ func TestIntOptionParser(t *testing.T) {
 
 	for name, tt := range testcases {
 		t.Run(name, func(t *testing.T) {
+			// 注意:并发问题
+			tt := tt
+			// 利用多核,并行运行
+			t.Parallel()
+
 			actual, err := parser.IntOptionParser().Parse(tt.options, tt.option)
 			tt.assertion(t, err)
 			assert.Equal(t, tt.expected, actual)
