@@ -59,6 +59,16 @@ func IntOptionParser() OptionParser {
 	}
 }
 
+func StringOptionParser() OptionParser {
+	return &unaryOptionParser[string]{
+		defaultValue:         "",
+		numOfFollowingValues: 1,
+		parseVauleFunc: func(s ...string) (string, error) {
+			return s[0], nil
+		},
+	}
+}
+
 type singleValueOptionParser struct {
 	defaultValue   interface{}
 	parseValueFunc func(s string) (interface{}, error)
@@ -68,28 +78,7 @@ func SingleValueOptionParser(defaultValue interface{}, parseValueFunc func(s str
 	if reflect.TypeOf(defaultValue).String() == "int" {
 		return IntOptionParser()
 	}
-	return &singleValueOptionParser{
-		defaultValue:   defaultValue,
-		parseValueFunc: parseValueFunc,
-	}
-}
-
-func (p *singleValueOptionParser) Parse(options []string, option string) (interface{}, error) {
-	i := indexOf(options, "-"+option)
-	if i < 0 {
-		return p.defaultValue, nil
-	}
-	n := 1
-	vals, err := valuesOf(i+1, n, options)
-	if err != nil {
-		return nil, err
-	}
-	return p.parseValue(vals), nil
-}
-
-func (p *singleValueOptionParser) parseValue(vals []string) interface{} {
-	val, _ := p.parseValueFunc(vals[0])
-	return val
+	return StringOptionParser()
 }
 
 func valuesOf(start int, expectedLen int, options []string) ([]string, error) {
