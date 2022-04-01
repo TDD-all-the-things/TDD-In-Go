@@ -72,6 +72,10 @@ func StringOptionParser() OptionParser {
 	}
 }
 
+func StringListParser() OptionParser {
+	return nil
+}
+
 func valuesOf(start int, expectedLen int, options []string) ([]string, error) {
 	values := valuesOfOptionFrom(start, indexOfFirstOptionFrom(start, options), options)
 	if len(values) < expectedLen {
