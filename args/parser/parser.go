@@ -162,17 +162,19 @@ func (p *listOptionParser[T]) parse(vals ...string) (interface{}, error) {
 	return val, nil
 }
 
-func StringListParser(parseValues ...ParseValueFunc[[]string]) OptionParser {
-	parser := &listOptionParser[[]string]{
-		defaultValue: []string{},
-		parseValue: func(s ...string) ([]string, error) {
-			return s, nil
-		},
+func ListOptionParser[T list](defaults T, parseValue ParseValueFunc[T]) OptionParser {
+	valuer := &listOptionParser[T]{
+		defaultValue: defaults,
+		parseValue:   parseValue,
 	}
-	if len(parseValues) != 0 {
-		parser.parseValue = parseValues[0]
+	return &optionParser{
+		valueCollector: valuer,
+		valueParser:    valuer,
 	}
-	return parser
+}
+
+func StringListParser(parseValue ParseValueFunc[[]string]) OptionParser {
+	return ListOptionParser([]string{}, parseValue)
 }
 
 type ParseValueFunc[T any] func(s ...string) (T, error)
