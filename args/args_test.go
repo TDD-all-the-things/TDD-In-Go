@@ -73,6 +73,13 @@ func TestParse(t *testing.T) {
 			},
 			assertion: assert.NoError,
 		},
+		"should return error if `exptected` is not a pointer to struct": {
+			flags:    []string{},
+			expected: new(int),
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.ErrorIs(tt, err, args.ErrUnsupportedDataType)
+			},
+		},
 	}
 
 	for name, tt := range testcases {
