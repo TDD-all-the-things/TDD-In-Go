@@ -203,7 +203,7 @@ func TestListOptionParser_StringListOption(t *testing.T) {
 			// 利用多核,并行运行
 			t.Parallel()
 
-			actual, err := parser.StringListOptionParser(tt.parseValues).Parse(tt.options, tt.option)
+			actual, err := parser.ListOptionParser([]string{}, tt.parseValues).Parse(tt.options, tt.option)
 			tt.assertion(t, err)
 			assert.Equal(t, tt.expected, actual)
 		})
