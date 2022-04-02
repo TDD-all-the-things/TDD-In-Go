@@ -88,6 +88,10 @@ func (p *unaryOptionParser[T]) values(options []string, option string) ([]string
 	return values, nil
 }
 
+func (p *unaryOptionParser[T]) defaults() interface{} {
+	return p.defaultValue
+}
+
 func (p *unaryOptionParser[T]) parse(vals ...string) (interface{}, error) {
 	val, err := p.parseValue(vals...)
 	if err != nil {
