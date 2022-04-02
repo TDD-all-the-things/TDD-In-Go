@@ -160,8 +160,10 @@ func ListOptionParser[T list](defaults T, parseValue parseValueFunc[T]) OptionPa
 	}
 }
 
-func StringListOptionParser(parseValue parseValueFunc[[]string]) OptionParser {
-	return ListOptionParser([]string{}, parseValue)
+func StringListOptionParser() OptionParser {
+	return ListOptionParser([]string{}, func(s ...string) ([]string, error) {
+		return s, nil
+	})
 }
 
 func valuesOfOptionFrom(start int, end int, options []string) []string {
