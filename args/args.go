@@ -9,7 +9,8 @@ import (
 )
 
 var (
-	ErrMissingTag = errors.New("missing tag")
+	ErrMissingTag            = errors.New("missing tag")
+	ErrUnsupportedOptionType = errors.New("unsupported option type")
 )
 
 func Parse(v interface{}, options ...string) error {
@@ -33,7 +34,11 @@ func parseOption(field reflect.StructField, options []string) (interface{}, erro
 	if tag == "" {
 		return nil, fmt.Errorf("%w", ErrMissingTag)
 	}
-	return parsers[field.Type.String()].Parse(options, tag)
+	p, ok := parsers[field.Type.String()]
+	if !ok {
+		return nil, fmt.Errorf("%w", ErrUnsupportedOptionType)
+	}
+	return p.Parse(options, tag)
 }
 
 var parsers map[string]parser.OptionParser = map[string]parser.OptionParser{
