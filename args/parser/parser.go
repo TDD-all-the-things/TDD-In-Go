@@ -126,7 +126,7 @@ func StringOptionParser() OptionParser {
 }
 
 type list interface {
-	[]string
+	[]int | []string
 }
 type listValueHelper[T list] struct {
 	defaultValue T
@@ -171,6 +171,20 @@ func ListOptionParser[T list](defaults T, parseValue parseValueFunc[T]) OptionPa
 func StringListOptionParser() OptionParser {
 	return ListOptionParser([]string{}, func(s ...string) ([]string, error) {
 		return s, nil
+	})
+}
+
+func IntListOptionParser() OptionParser {
+	return ListOptionParser([]int{}, func(s ...string) ([]int, error) {
+		ints := []int{}
+		for _, v := range s {
+			i, err := strconv.Atoi(v)
+			if err != nil {
+				return nil, err
+			}
+			ints = append(ints, i)
+		}
+		return ints, nil
 	})
 }
 

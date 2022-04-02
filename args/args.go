@@ -42,7 +42,9 @@ func parseOption(field reflect.StructField, options []string) (interface{}, erro
 }
 
 var parsers map[string]parser.OptionParser = map[string]parser.OptionParser{
-	"bool":   parser.BoolOptionParser(),
-	"int":    parser.IntOptionParser(),
-	"string": parser.StringOptionParser(),
+	"bool":     parser.BoolOptionParser(),
+	"int":      parser.IntOptionParser(),
+	"string":   parser.StringOptionParser(),
+	"[]int":    parser.IntListOptionParser(),
+	"[]string": parser.StringListOptionParser(),
 }
