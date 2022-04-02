@@ -51,6 +51,17 @@ func TestParse(t *testing.T) {
 				return assert.ErrorIs(tt, err, args.ErrMissingTag)
 			},
 		},
+		"should return error if unknown option type present": {
+			flags: []string{"-k", "true", "false", "true"},
+			expected: &struct {
+				List []bool `args:"k"`
+			}{
+				[]bool(nil),
+			},
+			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
+				return assert.ErrorIs(tt, err, args.ErrUnsupportedOptionType)
+			},
+		},
 	}
 
 	for name, tt := range testcases {
