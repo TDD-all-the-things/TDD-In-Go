@@ -94,12 +94,12 @@ type ListOption struct {
       - ~~`-l` bool~~
       - ~~`-p 8080` int~~
       - ~~`-d /usr/logs` string~~
-    - case 2
-      - `-g this is a list` []stirng
-      - `-d 1 3 2 4` []int
+    - ~~case 2~~
+      - ~~`-g this is a list` []stirng~~
+      - ~~`-d 1 3 2 4` []int~~
 2. Multiple Options
    - ~~`-l -p 8080 -d /usr/logs`~~
-   - `-g this is a list -d 1 3 2 4`
+   - ~~ `-g this is a list -d 1 3 2 4`~~
 3. Sad path
    - bool `-l t` `-l t f`
    - int `-p` `-p 8080 8081`
