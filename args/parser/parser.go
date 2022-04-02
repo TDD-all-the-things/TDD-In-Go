@@ -85,7 +85,7 @@ func (p *unaryOptionParser[T]) parse(vals ...string) (interface{}, error) {
 	return val, nil
 }
 
-func UnaryOptionParser[T unary](defaults T, numOfExpectedValues int, parseValue ParseValueFunc[T]) OptionParser {
+func UnaryOptionParser[T unary](defaults T, numOfExpectedValues int, parseValue parseValueFunc[T]) OptionParser {
 	valuer := &unaryOptionParser[T]{
 		defaultValue:        defaults,
 		numOfExpectedValues: numOfExpectedValues,
@@ -147,7 +147,7 @@ func (p *listOptionParser[T]) parse(vals ...string) (interface{}, error) {
 	return val, nil
 }
 
-func ListOptionParser[T list](defaults T, parseValue ParseValueFunc[T]) OptionParser {
+func ListOptionParser[T list](defaults T, parseValue parseValueFunc[T]) OptionParser {
 	valuer := &listOptionParser[T]{
 		defaultValue: defaults,
 		parseValue:   parseValue,
@@ -158,11 +158,11 @@ func ListOptionParser[T list](defaults T, parseValue ParseValueFunc[T]) OptionPa
 	}
 }
 
-func StringListOptionParser(parseValue ParseValueFunc[[]string]) OptionParser {
+func StringListOptionParser(parseValue parseValueFunc[[]string]) OptionParser {
 	return ListOptionParser([]string{}, parseValue)
 }
 
-type ParseValueFunc[T any] func(s ...string) (T, error)
+type parseValueFunc[T unary | list] func(s ...string) (T, error)
 
 func valuesOfOptionFrom(start int, end int, options []string) []string {
 	values := []string{}
