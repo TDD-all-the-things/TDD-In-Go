@@ -109,10 +109,10 @@ type ListOption struct {
    - ~~int `0`~~
    - ~~string `""`~~
 5. Handle Error
-   - v in args.Parse is not an pointer of struct?
-   - v is CanSet?CanAddr?
-   - v's field is unexported?
-   - v's field CanSet?
+   - ~~v in args.Parse is not an pointer of struct?~~
+   - ~~v is CanSet?CanAddr?~~
+   - ~~v's field is unexported?~~
+   - ~~v's field CanSet?~~
    - ~~v's field don't have "args" tag~~
    - ~~v's field has "args" tag, but it's empty~~ 处理逻辑同缺失
    - func parserOption , if parser not found in PARSERS map?
