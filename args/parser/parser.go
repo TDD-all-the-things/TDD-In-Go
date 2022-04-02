@@ -58,21 +58,6 @@ type unaryOptionParser[T unary] struct {
 	parseValue          func(s ...string) (T, error)
 }
 
-func (p *unaryOptionParser[T]) Parse(options []string, option string) (interface{}, error) {
-	vals, err := p.values(options, option)
-	if err != nil {
-		return nil, err
-	}
-	if vals == nil {
-		return p.defaultValue, nil
-	}
-	val, err := p.parse(vals...)
-	if err != nil {
-		return nil, err
-	}
-	return val, nil
-}
-
 func (p *unaryOptionParser[T]) values(options []string, option string) ([]string, error) {
 	i := indexOf(options, "-"+option)
 	if i < 0 {
