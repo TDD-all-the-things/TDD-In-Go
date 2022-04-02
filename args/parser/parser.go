@@ -100,34 +100,34 @@ func (p *unaryOptionParser[T]) parse(vals ...string) (interface{}, error) {
 	return val, nil
 }
 
-func BoolOptionParser() OptionParser {
-	return &unaryOptionParser[bool]{
-		defaultValue:        false,
-		numOfExpectedValues: 0,
-		parseValue: func(s ...string) (bool, error) {
-			return true, nil
-		},
+func UnaryOptionParser[T unary](defaults T, numOfExpectedValues int, parseValue ParseValueFunc[T]) OptionParser {
+	valuer := &unaryOptionParser[T]{
+		defaultValue:        defaults,
+		numOfExpectedValues: numOfExpectedValues,
+		parseValue:          parseValue,
 	}
+	return &optionParser{
+		valueCollector: valuer,
+		valueParser:    valuer,
+	}
+}
+
+func BoolOptionParser() OptionParser {
+	return UnaryOptionParser(false, 0, func(s ...string) (bool, error) {
+		return true, nil
+	})
 }
 
 func IntOptionParser() OptionParser {
-	return &unaryOptionParser[int]{
-		defaultValue:        0,
-		numOfExpectedValues: 1,
-		parseValue: func(s ...string) (int, error) {
-			return strconv.Atoi(s[0])
-		},
-	}
+	return UnaryOptionParser(0, 1, func(s ...string) (int, error) {
+		return strconv.Atoi(s[0])
+	})
 }
 
 func StringOptionParser() OptionParser {
-	return &unaryOptionParser[string]{
-		defaultValue:        "",
-		numOfExpectedValues: 1,
-		parseValue: func(s ...string) (string, error) {
-			return s[0], nil
-		},
-	}
+	return UnaryOptionParser("", 1, func(s ...string) (string, error) {
+		return s[0], nil
+	})
 }
 
 type list interface {
