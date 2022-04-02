@@ -128,12 +128,12 @@ func StringOptionParser() OptionParser {
 type list interface {
 	[]string
 }
-type listOptionParser[T list] struct {
+type listValueHelper[T list] struct {
 	defaultValue T
 	parseValue   func(s ...string) (T, error)
 }
 
-func (p *listOptionParser[T]) values(options []string, option string) ([]string, error) {
+func (p *listValueHelper[T]) values(options []string, option string) ([]string, error) {
 	i := indexOf(options, "-"+option)
 	if i < 0 {
 		return nil, nil
@@ -145,11 +145,11 @@ func (p *listOptionParser[T]) values(options []string, option string) ([]string,
 	return vals, nil
 }
 
-func (p *listOptionParser[T]) defaults() interface{} {
+func (p *listValueHelper[T]) defaults() interface{} {
 	return p.defaultValue
 }
 
-func (p *listOptionParser[T]) parse(vals ...string) (interface{}, error) {
+func (p *listValueHelper[T]) parse(vals ...string) (interface{}, error) {
 	val, err := p.parseValue(vals...)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %s", ErrIllegalListValues, strings.Join(vals, ","))
@@ -158,13 +158,13 @@ func (p *listOptionParser[T]) parse(vals ...string) (interface{}, error) {
 }
 
 func ListOptionParser[T list](defaults T, parseValue parseValueFunc[T]) OptionParser {
-	valuer := &listOptionParser[T]{
+	helper := &listValueHelper[T]{
 		defaultValue: defaults,
 		parseValue:   parseValue,
 	}
 	return &optionParser{
-		valueCollector: valuer,
-		valueParser:    valuer,
+		valueCollector: helper,
+		valueParser:    helper,
 	}
 }
 
