@@ -150,6 +150,10 @@ func (p *listOptionParser[T]) values(options []string, option string) ([]string,
 	return vals, nil
 }
 
+func (p *listOptionParser[T]) defaults() interface{} {
+	return p.defaultValue
+}
+
 func (p *listOptionParser[T]) parse(vals ...string) (interface{}, error) {
 	val, err := p.parseValue(vals...)
 	if err != nil {
