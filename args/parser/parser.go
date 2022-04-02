@@ -88,19 +88,19 @@ func (p *fixedNumberValueHelper[T]) parse(vals ...string) (interface{}, error) {
 type parseValueFunc[T fixed | list] func(s ...string) (T, error)
 
 func UnaryOptionParser[T fixed](defaults T, parseValue parseValueFunc[T]) OptionParser {
-	valuer := &fixedNumberValueHelper[T]{
+	helper := &fixedNumberValueHelper[T]{
 		defaultValue:        defaults,
 		numOfExpectedValues: 1,
 		parseValue:          parseValue,
 	}
 	return &optionParser{
-		valueCollector: valuer,
-		valueParser:    valuer,
+		valueCollector: helper,
+		valueParser:    helper,
 	}
 }
 
 func BoolOptionParser() OptionParser {
-	valuer := &fixedNumberValueHelper[bool]{
+	helper := &fixedNumberValueHelper[bool]{
 		defaultValue:        false,
 		numOfExpectedValues: 0,
 		parseValue: func(s ...string) (bool, error) {
@@ -108,8 +108,8 @@ func BoolOptionParser() OptionParser {
 		},
 	}
 	return &optionParser{
-		valueCollector: valuer,
-		valueParser:    valuer,
+		valueCollector: helper,
+		valueParser:    helper,
 	}
 }
 
