@@ -21,7 +21,7 @@ type OptionParser interface {
 }
 
 type valueCollector interface {
-	values(options []string, option string) (values []string, err error)
+	collectValues(options []string, option string) (values []string, err error)
 }
 
 type valueParser interface {
@@ -35,7 +35,7 @@ type optionParser struct {
 }
 
 func (p *optionParser) Parse(options []string, option string) (interface{}, error) {
-	vals, err := p.values(options, option)
+	vals, err := p.collectValues(options, option)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ type fixedNumberValueHelper[T fixed] struct {
 	parseValue          func(s ...string) (T, error)
 }
 
-func (p *fixedNumberValueHelper[T]) values(options []string, option string) ([]string, error) {
+func (p *fixedNumberValueHelper[T]) collectValues(options []string, option string) ([]string, error) {
 	i := indexOf(options, "-"+option)
 	if i < 0 {
 		return nil, nil
@@ -133,7 +133,7 @@ type listValueHelper[T list] struct {
 	parseValue   func(s ...string) (T, error)
 }
 
-func (p *listValueHelper[T]) values(options []string, option string) ([]string, error) {
+func (p *listValueHelper[T]) collectValues(options []string, option string) ([]string, error) {
 	i := indexOf(options, "-"+option)
 	if i < 0 {
 		return nil, nil
