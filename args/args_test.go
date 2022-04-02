@@ -62,6 +62,17 @@ func TestParse(t *testing.T) {
 				return assert.ErrorIs(tt, err, args.ErrUnsupportedOptionType)
 			},
 		},
+		"should parse list values if list type option present": {
+			flags: []string{"-g", "this", "is", "a", "list", "-d", "1", "-3", "2"},
+			expected: &struct {
+				List   []string `args:"g"`
+				Digits []int    `args:"d"`
+			}{
+				List:   []string{"this", "is", "a", "list"},
+				Digits: []int{1, -3, 2},
+			},
+			assertion: assert.NoError,
+		},
 	}
 
 	for name, tt := range testcases {
