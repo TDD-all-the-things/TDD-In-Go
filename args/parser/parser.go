@@ -20,6 +20,35 @@ type OptionParser interface {
 	Parse(options []string, option string) (interface{}, error)
 }
 
+type valueCollector interface {
+	values(options []string, option string) (values []string, err error)
+}
+
+type valueParser interface {
+	defaults() interface{}
+	parse(values ...string) (interface{}, error)
+}
+
+type optionParser struct {
+	valueParser
+	valueCollector
+}
+
+func (p *optionParser) Parse(options []string, option string) (interface{}, error) {
+	vals, err := p.values(options, option)
+	if err != nil {
+		return nil, err
+	}
+	if vals == nil {
+		return p.defaults(), nil
+	}
+	val, err := p.parse(vals...)
+	if err != nil {
+		return nil, err
+	}
+	return val, nil
+}
+
 type unary interface {
 	bool | int | string
 }
