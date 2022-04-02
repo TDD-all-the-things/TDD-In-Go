@@ -123,21 +123,6 @@ type listOptionParser[T list] struct {
 	parseValue   func(s ...string) (T, error)
 }
 
-func (p *listOptionParser[T]) Parse(options []string, option string) (interface{}, error) {
-	vals, err := p.values(options, option)
-	if err != nil {
-		return nil, err
-	}
-	if vals == nil {
-		return p.defaultValue, nil
-	}
-	val, err := p.parse(vals...)
-	if err != nil {
-		return nil, err
-	}
-	return val, nil
-}
-
 func (p *listOptionParser[T]) values(options []string, option string) ([]string, error) {
 	i := indexOf(options, "-"+option)
 	if i < 0 {
