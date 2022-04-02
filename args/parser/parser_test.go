@@ -1,6 +1,7 @@
 package parser_test
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/longyue0521/TDD-In-Go/args/parser"
@@ -64,54 +65,69 @@ func TestTestUnaryOptionParser_BoolOption(t *testing.T) {
 
 func TestUnaryOptionParser_IntOption(t *testing.T) {
 	testcases := map[string]struct {
-		options   []string
-		option    string
-		expected  interface{}
-		assertion assert.ErrorAssertionFunc
+		options    []string
+		option     string
+		parseValue func(s ...string) (int, error)
+		expected   interface{}
+		assertion  assert.ErrorAssertionFunc
 	}{
 		"should not accept extra argument for int option": {
-			options:  []string{"-p", "8080", "8081"},
-			option:   "p",
+			options: []string{"-p", "8080", "8081"},
+			option:  "p",
+			parseValue: func(s ...string) (int, error) {
+				return strconv.Atoi(s[0])
+			},
 			expected: (interface{})(nil),
 			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
 				return assert.ErrorIs(t, err, parser.ErrTooManyArguments)
 			},
 		},
 		"should not missing argument for int option": {
-			options:  []string{"-p"},
-			option:   "p",
+			options: []string{"-p"},
+			option:  "p",
+			parseValue: func(s ...string) (int, error) {
+				return strconv.Atoi(s[0])
+			},
 			expected: (interface{})(nil),
 			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
 				return assert.ErrorIs(t, err, parser.ErrMissingArgument)
 			},
 		},
 		"should not missing argument for int option but with another option": {
-			options:  []string{"-p", "-l"},
-			option:   "p",
+			options: []string{"-p", "-l"},
+			option:  "p",
+			parseValue: func(s ...string) (int, error) {
+				return strconv.Atoi(s[0])
+			},
 			expected: (interface{})(nil),
 			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
 				return assert.ErrorIs(t, err, parser.ErrMissingArgument)
 			},
 		},
 		"should set default value if int option not present": {
-			options:  []string{},
-			option:   "p",
-			expected: (interface{})(0),
-			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
-				return assert.NoError(t, err)
+			options: []string{},
+			option:  "p",
+			parseValue: func(s ...string) (int, error) {
+				return strconv.Atoi(s[0])
 			},
+			expected:  (interface{})(0),
+			assertion: assert.NoError,
 		},
 		"should parse value if int option present": {
-			options:  []string{"-p", "9080"},
-			option:   "p",
-			expected: (interface{})(9080),
-			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
-				return assert.NoError(t, err)
+			options: []string{"-p", "9080"},
+			option:  "p",
+			parseValue: func(s ...string) (int, error) {
+				return strconv.Atoi(s[0])
 			},
+			expected:  (interface{})(9080),
+			assertion: assert.NoError,
 		},
 		"should not parse illegal value if int option present": {
-			options:  []string{"-p", "9x8y"},
-			option:   "p",
+			options: []string{"-p", "9x8y"},
+			option:  "p",
+			parseValue: func(s ...string) (int, error) {
+				return 0, parser.ErrTooManyArguments
+			},
 			expected: (interface{})(nil),
 			assertion: func(tt assert.TestingT, err error, i ...interface{}) bool {
 				return assert.ErrorIs(t, err, parser.ErrIllegalValue)
@@ -126,7 +142,7 @@ func TestUnaryOptionParser_IntOption(t *testing.T) {
 			// 利用多核,并行运行
 			t.Parallel()
 
-			actual, err := parser.IntOptionParser().Parse(tt.options, tt.option)
+			actual, err := parser.UnaryOptionParser(0, tt.parseValue).Parse(tt.options, tt.option)
 			tt.assertion(t, err)
 			assert.Equal(t, tt.expected, actual)
 		})
