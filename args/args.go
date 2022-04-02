@@ -11,9 +11,13 @@ import (
 var (
 	ErrMissingTag            = errors.New("missing tag")
 	ErrUnsupportedOptionType = errors.New("unsupported option type")
+	ErrUnsupportedDataType   = errors.New("unsupported data type")
 )
 
 func Parse(v interface{}, options ...string) error {
+	if reflect.TypeOf(v).Kind() != reflect.Pointer || reflect.TypeOf(v).Elem().Kind() != reflect.Struct {
+		return fmt.Errorf("%w", ErrUnsupportedDataType)
+	}
 	obj := reflect.ValueOf(v).Elem()
 
 	for i := 0; i < obj.NumField(); i++ {
