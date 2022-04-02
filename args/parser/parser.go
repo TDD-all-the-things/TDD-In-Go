@@ -49,16 +49,16 @@ func (p *optionParser) Parse(options []string, option string) (interface{}, erro
 	return val, nil
 }
 
-type unary interface {
+type fixed interface {
 	bool | int | string
 }
-type unaryOptionParser[T unary] struct {
+type fixedNumberValueHelper[T fixed] struct {
 	defaultValue        T
 	numOfExpectedValues int
 	parseValue          func(s ...string) (T, error)
 }
 
-func (p *unaryOptionParser[T]) values(options []string, option string) ([]string, error) {
+func (p *fixedNumberValueHelper[T]) values(options []string, option string) ([]string, error) {
 	i := indexOf(options, "-"+option)
 	if i < 0 {
 		return nil, nil
@@ -73,11 +73,11 @@ func (p *unaryOptionParser[T]) values(options []string, option string) ([]string
 	return values, nil
 }
 
-func (p *unaryOptionParser[T]) defaults() interface{} {
+func (p *fixedNumberValueHelper[T]) defaults() interface{} {
 	return p.defaultValue
 }
 
-func (p *unaryOptionParser[T]) parse(vals ...string) (interface{}, error) {
+func (p *fixedNumberValueHelper[T]) parse(vals ...string) (interface{}, error) {
 	val, err := p.parseValue(vals...)
 	if err != nil {
 		return nil, fmt.Errorf("%w", ErrIllegalValue)
@@ -85,12 +85,12 @@ func (p *unaryOptionParser[T]) parse(vals ...string) (interface{}, error) {
 	return val, nil
 }
 
-type parseValueFunc[T unary | list] func(s ...string) (T, error)
+type parseValueFunc[T fixed | list] func(s ...string) (T, error)
 
-func UnaryOptionParser[T unary](defaults T, numOfExpectedValues int, parseValue parseValueFunc[T]) OptionParser {
-	valuer := &unaryOptionParser[T]{
+func UnaryOptionParser[T fixed](defaults T, parseValue parseValueFunc[T]) OptionParser {
+	valuer := &fixedNumberValueHelper[T]{
 		defaultValue:        defaults,
-		numOfExpectedValues: numOfExpectedValues,
+		numOfExpectedValues: 1,
 		parseValue:          parseValue,
 	}
 	return &optionParser{
@@ -100,19 +100,27 @@ func UnaryOptionParser[T unary](defaults T, numOfExpectedValues int, parseValue 
 }
 
 func BoolOptionParser() OptionParser {
-	return UnaryOptionParser(false, 0, func(s ...string) (bool, error) {
-		return true, nil
-	})
+	valuer := &fixedNumberValueHelper[bool]{
+		defaultValue:        false,
+		numOfExpectedValues: 0,
+		parseValue: func(s ...string) (bool, error) {
+			return true, nil
+		},
+	}
+	return &optionParser{
+		valueCollector: valuer,
+		valueParser:    valuer,
+	}
 }
 
 func IntOptionParser() OptionParser {
-	return UnaryOptionParser(0, 1, func(s ...string) (int, error) {
+	return UnaryOptionParser(0, func(s ...string) (int, error) {
 		return strconv.Atoi(s[0])
 	})
 }
 
 func StringOptionParser() OptionParser {
-	return UnaryOptionParser("", 1, func(s ...string) (string, error) {
+	return UnaryOptionParser("", func(s ...string) (string, error) {
 		return s[0], nil
 	})
 }
